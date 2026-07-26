@@ -62,25 +62,18 @@
         }
 
         .logo {
+            font-weight: 800;
+            font-size: 1.2rem;
+            letter-spacing: -0.5px;
             display: flex;
             align-items: center;
-            justify-content: center;
-            height: 50px;
-            width: 140px;
-            overflow: hidden; /* Acts as a precise crop box */
+            gap: 8px;
         }
         
-        .logo img {
-            height: 300px; /* Zooms in to bypass the massive white borders */
-            width: auto;
-            object-fit: contain;
-            filter: invert(1) hue-rotate(180deg) brightness(1.4); /* Makes text readable and preserves orange */
-            mix-blend-mode: screen; /* Completely drops the white background to match the website */
-            transition: transform 0.3s ease;
-        }
-        
-        .logo:hover img {
-            transform: scale(1.05);
+        .logo span { 
+            background: linear-gradient(135deg, #ff9900, #ff5e00);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         /* Bento Grid Layout */
@@ -324,7 +317,7 @@
 
     <nav>
         <div class="logo">
-            <img src="logo.png" alt="AWS Community VCE Logo">
+            ☁️ AWS <span>Community</span> VCE
         </div>
     </nav>
 
