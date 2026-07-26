@@ -21,8 +21,8 @@
 
         body{
             font-family:'Inter',sans-serif;
-            background:#0b1220;
-            color:#f8fafc;
+            background:#faf9f6;
+            color:#0f172a;
             line-height:1.7;
         }
 
@@ -42,8 +42,8 @@
             top:0;
             z-index:100;
             backdrop-filter:blur(14px);
-            background:rgba(11,18,32,.75);
-            border-bottom:1px solid rgba(255,255,255,.05);
+            background:rgba(250,249,246,.85);
+            border-bottom:1px solid rgba(0,0,0,.05);
         }
 
         nav{
@@ -70,13 +70,13 @@
         }
 
         nav li{
-            color:#cbd5e1;
+            color:#475569;
             font-size:.95rem;
             transition:.25s;
         }
 
         nav li:hover{
-            color:#fff;
+            color:#0f172a;
         }
 
         .hero{
@@ -114,7 +114,7 @@
         .hero p{
             max-width:760px;
             margin:28px auto;
-            color:#94a3b8;
+            color:#475569;
             font-size:1.08rem;
         }
 
@@ -135,20 +135,22 @@
 
         .primary{
             background:#ff9900;
-            color:#111827;
+            color:#ffffff;
         }
 
         .primary:hover{
             transform:translateY(-3px);
+            box-shadow:0 8px 20px -6px rgba(255,153,0,0.5);
         }
 
         .secondary{
-            border:1px solid rgba(255,255,255,.15);
-            color:#fff;
+            border:1px solid rgba(0,0,0,.15);
+            color:#0f172a;
+            background:#ffffff;
         }
 
         .secondary:hover{
-            background:#ffffff10;
+            background:rgba(0,0,0,.03);
         }
 
         section{
@@ -161,7 +163,7 @@
         }
 
         .sub{
-            color:#94a3b8;
+            color:#475569;
             max-width:700px;
         }
 
@@ -173,8 +175,8 @@
         }
 
         .card{
-            background:#111827;
-            border:1px solid rgba(255,255,255,.05);
+            background:#ffffff;
+            border:1px solid rgba(0,0,0,.06);
             border-radius:18px;
             padding:28px;
             transition:.25s;
@@ -182,7 +184,8 @@
 
         .card:hover{
             transform:translateY(-6px);
-            border-color:#ff990040;
+            border-color:#ff990060;
+            box-shadow:0 12px 24px -8px rgba(0,0,0,.05);
         }
 
         .card h3{
@@ -190,7 +193,7 @@
         }
 
         .card p{
-            color:#94a3b8;
+            color:#475569;
             font-size:.95rem;
         }
 
@@ -203,10 +206,11 @@
 
         .chip{
             padding:10px 18px;
-            background:#111827;
+            background:#ffffff;
             border-radius:999px;
-            border:1px solid rgba(255,255,255,.08);
-            color:#cbd5e1;
+            border:1px solid rgba(0,0,0,.08);
+            color:#475569;
+            font-weight:500;
         }
 
         .links{
@@ -217,24 +221,33 @@
         }
 
         .link-card{
-            background:#111827;
+            background:#ffffff;
             border-radius:18px;
             padding:24px;
-            border:1px solid rgba(255,255,255,.05);
+            border:1px solid rgba(0,0,0,.06);
+            display:block;
+            transition:.25s;
+        }
+
+        .link-card:hover{
+            transform:translateY(-6px);
+            border-color:#ff990060;
+            box-shadow:0 12px 24px -8px rgba(0,0,0,.05);
         }
 
         .link-card span{
             display:block;
             margin-top:10px;
-            color:#94a3b8;
+            color:#64748b;
         }
 
         .team{
             text-align:center;
-            background:#111827;
+            background:#ffffff;
             border-radius:22px;
             padding:45px;
             margin-top:40px;
+            border:1px solid rgba(0,0,0,.06);
         }
 
         .team h3{
@@ -243,11 +256,11 @@
         }
 
         .team p{
-            color:#94a3b8;
+            color:#475569;
         }
 
         footer{
-            border-top:1px solid rgba(255,255,255,.08);
+            border-top:1px solid rgba(0,0,0,.06);
             padding:35px 0;
             text-align:center;
             color:#64748b;
@@ -263,24 +276,32 @@
         }
 
         @media(max-width:760px){
-
             nav ul{
                 display:none;
             }
-
             .hero{
                 padding-top:80px;
             }
-
             h2{
                 font-size:1.7rem;
             }
+        }
 
+        .js .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+
+        .js .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
         }
 
     </style>
 
 </head>
+<script>document.documentElement.classList.add('js');</script>
 <body>
 
 <header>
@@ -412,25 +433,25 @@ is by building.
 
 <div class="links">
 
-<div class="link-card">
+<a href="#" target="_blank" rel="noopener noreferrer" class="link-card fade-in">
 <h3>📖 Medium</h3>
 <span>Technical articles & tutorials</span>
-</div>
+</a>
 
-<div class="link-card">
+<a href="#" target="_blank" rel="noopener noreferrer" class="link-card fade-in">
 <h3>🎥 YouTube</h3>
 <span>Project walkthroughs & workshops</span>
-</div>
+</a>
 
-<div class="link-card">
+<a href="https://linkedin.com/company/aws-cloud-vce" target="_blank" rel="noopener noreferrer" class="link-card fade-in">
 <h3>💼 LinkedIn</h3>
 <span>Community updates & events</span>
-</div>
+</a>
 
-<div class="link-card">
+<a href="https://github.com/AWS-Community-VCE" target="_blank" rel="noopener noreferrer" class="link-card fade-in">
 <h3>💻 GitHub</h3>
 <span>Open-source projects & code</span>
-</div>
+</a>
 
 </div>
 
@@ -447,7 +468,7 @@ is by building.
 <h3>Founded by</h3>
 
 <p>
-Avulla Utej<br>
+<a href="https://github.com/utej8553" target="_blank" rel="noopener noreferrer" style="color:#ff9900;font-weight:600;transition:.25s;" onmouseover="this.style.color='#0f172a'" onmouseout="this.style.color='#ff9900'">Avulla Utej</a><br>
 AWS Student Builder Group Leader
 </p>
 
@@ -461,8 +482,8 @@ AWS Student Builder Group Leader
 
 <div class="footer-links">
 
-<a href="#">GitHub</a>
-<a href="#">LinkedIn</a>
+<a href="https://github.com/AWS-Community-VCE" target="_blank" rel="noopener noreferrer">GitHub</a>
+<a href="https://linkedin.com/company/aws-cloud-vce" target="_blank" rel="noopener noreferrer">LinkedIn</a>
 <a href="#">Medium</a>
 <a href="#">YouTube</a>
 
@@ -482,5 +503,22 @@ Disclaimer: AWS Cloud Community – VCE is a student-led community and is not af
 
 </footer>
 
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const elements = document.querySelectorAll('.hero h1, .hero p, .buttons, section h2, .sub, .card, .chip, .team');
+        elements.forEach(el => el.classList.add('fade-in'));
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1, rootMargin: "0px 0px -30px 0px" });
+
+        document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+    });
+</script>
 </body>
 </html>
