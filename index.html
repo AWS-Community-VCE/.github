@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,412 +7,739 @@
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
     
     <style>
         :root {
-            --bg: #050505;
-            --text-main: #ffffff;
-            --text-muted: #a1a1aa;
-            --accent: #ff9900;
-            --accent-glow: rgba(255, 153, 0, 0.15);
-            --border: rgba(255, 255, 255, 0.08);
-            --box-bg: rgba(255, 255, 255, 0.02);
+            --bg-main: #ffffff;
+            --bg-surface: #f9fafb;
+            --border-light: #e5e7eb;
+            --border-dark: #d1d5db;
+            --text-primary: #111827;
+            --text-secondary: #4b5563;
+            --text-tertiary: #6b7280;
+            --aws-orange: #ff9900;
+            --aws-orange-dim: #fff4e5;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-hover: 0 12px 24px -8px rgba(0, 0, 0, 0.12), 0 4px 8px -4px rgba(0, 0, 0, 0.08);
+            --radius-md: 8px;
+            --radius-lg: 12px;
+            --transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
         body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--bg);
-            color: var(--text-main);
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-primary);
             line-height: 1.6;
             -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
             overflow-x: hidden;
         }
 
-        /* Ambient Glow Background */
-        body::before {
-            content: '';
+        /* Clean Background Grid */
+        .bg-grid {
             position: fixed;
-            top: -50%; left: -20%; width: 140%; height: 140%;
-            background: radial-gradient(circle at 50% 50%, rgba(255, 153, 0, 0.07), transparent 60%);
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background-image: linear-gradient(var(--border-light) 1px, transparent 1px),
+                              linear-gradient(90deg, var(--border-light) 1px, transparent 1px);
+            background-size: 40px 40px;
+            opacity: 0.4;
             z-index: -1;
             pointer-events: none;
+            mask-image: linear-gradient(to bottom, black 0%, transparent 70%);
+            -webkit-mask-image: linear-gradient(to bottom, black 0%, transparent 70%);
         }
-        body::after {
-            content: '';
-            position: fixed;
-            top: 20%; left: 40%; width: 100%; height: 100%;
-            background: radial-gradient(circle at 50% 50%, rgba(138, 43, 226, 0.04), transparent 50%);
-            z-index: -1;
-            pointer-events: none;
-        }
-
-        a { text-decoration: none; color: inherit; }
 
         /* Navigation */
         nav {
+            position: fixed;
+            top: 0; width: 100%;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-light);
+            z-index: 100;
+            padding: 16px 0;
+            transition: var(--transition);
+        }
+
+        nav.scrolled {
+            padding: 12px 0;
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .nav-container {
+            max-width: 1120px;
+            margin: 0 auto;
+            padding: 0 24px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 32px 48px;
-            max-width: 1400px;
-            margin: 0 auto;
         }
 
         .logo {
-            font-weight: 800;
-            font-size: 1.2rem;
-            letter-spacing: -0.5px;
             display: flex;
             align-items: center;
-            gap: 8px;
-        }
-        
-        .logo span { 
-            background: linear-gradient(135deg, #ff9900, #ff5e00);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            gap: 12px;
+            font-weight: 700;
+            font-size: 1.125rem;
+            color: var(--text-primary);
+            text-decoration: none;
+            letter-spacing: -0.01em;
+            transition: var(--transition);
         }
 
-        /* Bento Grid Layout */
-        .bento-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            grid-template-rows: auto;
-            gap: 24px;
-            max-width: 1200px;
-            margin: 40px auto 100px;
+        .logo:hover {
+            transform: scale(1.02);
+        }
+
+        .logo-icon {
+            color: var(--aws-orange);
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 32px;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            font-weight: 500;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .nav-links a:hover {
+            color: var(--text-primary);
+        }
+
+        .container {
+            max-width: 1120px;
+            margin: 0 auto;
             padding: 0 24px;
         }
 
-        /* Bento Box Base */
-        .bento-box {
-            background: var(--box-bg);
-            border: 1px solid var(--border);
-            border-radius: 32px;
-            padding: 40px;
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
-            display: flex;
-            flex-direction: column;
-            position: relative;
-            overflow: hidden;
+        /* Hero */
+        .hero {
+            padding: 160px 0 100px;
+            border-bottom: 1px solid var(--border-light);
+            background: linear-gradient(180deg, var(--bg-surface) 0%, var(--bg-main) 100%);
         }
 
-        .bento-box::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(180deg, rgba(255,255,255,0.03) 0%, transparent 100%);
-            opacity: 0;
-            transition: opacity 0.4s;
-            pointer-events: none;
+        .hero-content {
+            max-width: 768px;
         }
 
-        .bento-box:hover {
-            border-color: rgba(255, 255, 255, 0.15);
-            background: rgba(255, 255, 255, 0.04);
-            transform: translateY(-4px);
-            box-shadow: 0 30px 60px -15px rgba(0,0,0,0.6), 0 0 30px var(--accent-glow);
-        }
-
-        .bento-box:hover::before { opacity: 1; }
-
-        /* Specific Grid Placements */
-        .box-hero { grid-column: 1 / 3; grid-row: 1 / 3; justify-content: center; }
-        .box-about { grid-column: 3 / 5; grid-row: 1 / 2; }
-        .box-services { grid-column: 3 / 4; grid-row: 2 / 4; }
-        .box-activities { grid-column: 4 / 5; grid-row: 2 / 4; }
-        .box-resources { grid-column: 1 / 3; grid-row: 3 / 4; }
-
-        /* Typography & Internal Layouts */
-        h2 {
-            font-size: 1.5rem;
-            font-weight: 700;
-            letter-spacing: -0.5px;
-            margin-bottom: 16px;
-            color: #fff;
-        }
-
-        p { color: var(--text-muted); font-size: 1rem; line-height: 1.6; }
-
-        /* Hero Specific */
-        .hero-badge {
-            display: inline-flex;
-            align-items: center;
-            padding: 8px 16px;
-            border-radius: 100px;
-            background: rgba(255, 153, 0, 0.1);
-            border: 1px solid rgba(255, 153, 0, 0.4);
-            color: var(--accent);
-            font-size: 0.85rem;
-            font-weight: 600;
-            margin-bottom: 24px;
-            width: fit-content;
-            box-shadow: 0 0 15px rgba(255, 153, 0, 0.2);
-        }
-
-        .box-hero h1 {
-            font-size: clamp(3rem, 5vw, 4.5rem);
-            font-weight: 800;
-            line-height: 1.1;
-            letter-spacing: -2px;
-            margin-bottom: 24px;
-        }
-
-        .box-hero p {
-            font-size: 1.15rem;
-            max-width: 90%;
-            margin-bottom: 40px;
-        }
-
-        /* AWS Services Specific */
-        .services-grid {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-top: 12px;
-        }
-
-        .service-item {
+        .badge {
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            padding: 10px 16px;
-            background: rgba(255,255,255,0.03);
-            border: 1px solid rgba(255,255,255,0.05);
-            border-radius: 100px;
-            transition: 0.3s;
-            font-size: 0.85rem;
-            font-weight: 500;
+            padding: 4px 12px;
+            background: var(--bg-main);
+            border: 1px solid var(--border-light);
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-sm);
         }
 
-        .service-item:hover {
-            background: rgba(255, 153, 0, 0.1);
-            border-color: rgba(255, 153, 0, 0.3);
-            color: var(--accent);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(255, 153, 0, 0.15);
+        .badge-dot {
+            width: 6px; height: 6px;
+            background-color: var(--aws-orange);
+            border-radius: 50%;
+            box-shadow: 0 0 8px rgba(255, 153, 0, 0.6);
+            animation: pulse-glow 2s infinite;
         }
 
-        /* Activities Specific */
-        .activities-list {
-            list-style: none;
+        @keyframes pulse-glow {
+            0% { box-shadow: 0 0 0 0 rgba(255, 153, 0, 0.4); }
+            70% { box-shadow: 0 0 0 4px rgba(255, 153, 0, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 153, 0, 0); }
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 800;
+            line-height: 1.1;
+            letter-spacing: -0.03em;
+            color: var(--text-primary);
+            margin-bottom: 24px;
+        }
+
+        .hero h1 span {
+            color: var(--aws-orange);
+        }
+
+        .hero p {
+            font-size: 1.125rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin-bottom: 40px;
+            line-height: 1.6;
+        }
+
+        .btn-group {
             display: flex;
-            flex-direction: column;
             gap: 16px;
-            margin-top: 8px;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px 24px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            border-radius: var(--radius-md);
+            text-decoration: none;
+            transition: var(--transition);
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background-color: var(--text-primary);
+            color: #ffffff;
+            border: 1px solid transparent;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px -4px rgba(0, 0, 0, 0.2);
+            background-color: #000000;
+        }
+
+        .btn-secondary {
+            background-color: #ffffff;
+            color: var(--text-primary);
+            border: 1px solid var(--border-dark);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--bg-surface);
+            border-color: var(--text-secondary);
+            transform: translateY(-2px);
+        }
+
+        /* Sections */
+        section {
+            padding: 96px 0;
+            border-bottom: 1px solid var(--border-light);
+            position: relative;
+        }
+
+        .section-header {
+            margin-bottom: 48px;
+            max-width: 640px;
+        }
+
+        .section-title {
+            font-size: 1.875rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            letter-spacing: -0.02em;
+            margin-bottom: 16px;
+        }
+
+        .section-desc {
+            font-size: 1.125rem;
+            color: var(--text-secondary);
+        }
+
+        /* Grid Layouts */
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 24px;
         }
         
-        .activities-list li {
-            position: relative;
-            padding-left: 24px;
-            color: var(--text-muted);
-            font-size: 0.95rem;
-        }
-
-        .activities-list li::before {
-            content: '→';
-            position: absolute;
-            left: 0;
-            color: var(--accent);
-            font-weight: bold;
-        }
-
-        /* Resources Specific */
-        .resources-grid {
+        .grid-1 {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 16px;
-            margin-top: 10px;
-            height: 100%;
+            grid-template-columns: 1fr;
+            gap: 24px;
         }
 
-        .resource-card {
-            background: rgba(255,255,255,0.03);
-            border: 1px solid rgba(255,255,255,0.05);
-            border-radius: 20px;
-            padding: 24px;
+        /* Cards */
+        .card {
+            background: #ffffff;
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-lg);
+            padding: 32px;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .card:hover {
+            border-color: rgba(255, 153, 0, 0.2);
+            transform: translateY(-6px) scale(1.01);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .card-icon {
+            width: 44px;
+            height: 44px;
+            background: var(--bg-surface);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-md);
             display: flex;
-            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            color: var(--aws-orange);
+            margin-bottom: 20px;
+            transition: var(--transition);
+        }
+        
+        .card:hover .card-icon {
+            background: var(--aws-orange-dim);
+            border-color: rgba(255, 153, 0, 0.2);
+        }
+
+        .card h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: var(--text-primary);
+        }
+
+        .card p {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* Placeholder specific styles for Challenges */
+        .challenge-card {
+            text-align: center;
+            padding: 64px 32px;
+            background: repeating-linear-gradient(45deg, var(--bg-surface), var(--bg-surface) 10px, #ffffff 10px, #ffffff 20px);
+            border: 1px dashed var(--border-dark);
+        }
+        
+        .challenge-card:hover {
+            border: 1px dashed var(--aws-orange);
+        }
+
+        .challenge-card .card-icon {
+            margin: 0 auto 20px;
+            width: 56px; height: 56px;
+            font-size: 1.5rem;
+        }
+
+        /* Glitch-Free Marquee */
+        .marquee-section {
+            padding: 80px 0;
+            border-bottom: 1px solid var(--border-light);
+            overflow: hidden;
+            background: var(--bg-main);
+            width: 100%;
+        }
+        
+        .marquee-wrapper {
+            position: relative;
+            width: 100%;
+            mask-image: linear-gradient(90deg, transparent, black 15%, black 85%, transparent);
+            -webkit-mask-image: linear-gradient(90deg, transparent, black 15%, black 85%, transparent);
+        }
+        
+        .marquee {
+            display: flex;
+            width: max-content;
+            animation: marquee-scroll 40s linear infinite;
+        }
+        
+        .marquee:hover {
+            animation-play-state: paused;
+        }
+        
+        .marquee-content {
+            display: flex;
+            gap: 16px;
+            padding: 0 8px;
+            flex-shrink: 0;
+        }
+
+        .tech-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 20px;
+            background: #ffffff;
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-md);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            transition: var(--transition);
+            white-space: nowrap;
+        }
+
+        .tech-item:hover {
+            background: var(--aws-orange-dim);
+            border-color: rgba(255, 153, 0, 0.3);
+            color: var(--aws-orange);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .tech-item i {
+            font-size: 1.125rem;
+            transition: var(--transition);
+        }
+        
+        .tech-item:hover i {
+            transform: scale(1.1);
+        }
+
+        @keyframes marquee-scroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        /* Links Card */
+        .link-card {
+            display: flex;
+            align-items: center;
             justify-content: space-between;
-            transition: 0.3s;
+            text-decoration: none;
+        }
+        
+        .link-content {
+            display: flex;
+            align-items: center;
+            gap: 16px;
         }
 
-        .resource-card:hover {
-            background: rgba(255,255,255,0.06);
-            border-color: rgba(255,255,255,0.2);
-            transform: translateY(-4px);
+        .link-card .card-icon {
+            margin-bottom: 0;
+            color: var(--text-secondary);
+            background: #ffffff;
+            border-color: var(--border-light);
         }
 
-        .resource-card h3 {
-            font-size: 1.1rem;
+        .link-card:hover .card-icon {
+            background: var(--aws-orange);
+            border-color: var(--aws-orange);
+            color: #ffffff;
+        }
+
+        .link-card h4 {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--text-primary);
             margin-bottom: 4px;
-            color: #fff;
         }
 
-        .resource-card p {
-            font-size: 0.85rem;
+        .link-card .link-desc {
+            font-size: 0.875rem;
+            color: var(--text-tertiary);
+        }
+
+        .link-arrow {
+            color: var(--text-tertiary);
+            transition: var(--transition);
+            font-size: 1.25rem;
+        }
+
+        .link-card:hover .link-arrow {
+            color: var(--aws-orange);
+            transform: translateX(6px);
         }
 
         /* Footer */
         footer {
-            text-align: center;
-            padding: 40px 24px;
-            color: #52525b;
-            font-size: 0.85rem;
-            border-top: 1px solid var(--border);
+            padding: 48px 0;
+            background: #ffffff;
         }
 
-        /* Responsive Breakpoints */
-        @media (max-width: 1024px) {
-            .bento-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            .box-hero { grid-column: 1 / 3; grid-row: auto; }
-            .box-about { grid-column: 1 / 3; grid-row: auto; }
-            .box-services { grid-column: 1 / 2; grid-row: auto; }
-            .box-activities { grid-column: 2 / 3; grid-row: auto; }
-            .box-resources { grid-column: 1 / 3; grid-row: auto; }
+        .footer-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 16px;
         }
 
-        @media (max-width: 640px) {
-            .bento-grid {
-                grid-template-columns: 1fr;
-            }
-            .box-hero, .box-about, .box-services, .box-activities, .box-resources {
-                grid-column: 1 / -1;
-                grid-row: auto;
-            }
-            .resources-grid { grid-template-columns: 1fr; }
-            .box-hero h1 { font-size: 2.5rem; }
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+        .footer-logo i {
+            color: var(--aws-orange);
         }
 
-        /* Entrance Animations */
-        .animate-in {
+        footer p {
+            font-size: 0.875rem;
+            color: var(--text-tertiary);
+        }
+
+        /* Fade-in Animation */
+        .reveal {
             opacity: 0;
-            transform: translateY(40px) scale(0.98);
-            animation: bentoFadeIn 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
-        }
-
-        @keyframes bentoFadeIn {
-            to {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-            }
+            transform: translateY(20px);
+            transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
         }
         
-        .delay-1 { animation-delay: 0.1s; }
-        .delay-2 { animation-delay: 0.2s; }
-        .delay-3 { animation-delay: 0.3s; }
-        .delay-4 { animation-delay: 0.4s; }
-        .delay-5 { animation-delay: 0.5s; }
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
 
+        .reveal-group.visible .reveal:nth-child(1) { transition-delay: 0.05s; }
+        .reveal-group.visible .reveal:nth-child(2) { transition-delay: 0.15s; }
+        .reveal-group.visible .reveal:nth-child(3) { transition-delay: 0.25s; }
+        .reveal-group.visible .reveal:nth-child(4) { transition-delay: 0.35s; }
+        
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .hero { padding: 120px 0 80px; }
+            .hero h1 { font-size: 2.5rem; }
+            .btn-group { flex-direction: column; }
+            .btn { width: 100%; }
+            .grid-2 { grid-template-columns: 1fr; }
+        }
     </style>
 </head>
 <body>
 
-    <nav>
-        <div class="logo">
-            ☁️ AWS <span>Community</span> VCE
+    <div class="bg-grid"></div>
+
+    <nav id="navbar">
+        <div class="nav-container">
+            <a href="#" class="logo">
+                <i class="ri-amazon-fill logo-icon"></i>
+                AWS Community VCE
+            </a>
+            <div class="nav-links">
+                <a href="#mission">Philosophy</a>
+                <a href="#technologies">Infrastructure</a>
+                <a href="#challenges">Challenges</a>
+                <a href="#community">Network</a>
+            </div>
         </div>
     </nav>
 
-    <main class="bento-grid">
-        
-        <!-- Hero Box -->
-        <div class="bento-box box-hero animate-in">
-            <div class="hero-badge">Official AWS Student Community</div>
-            <h1>Learn. Build.<br>Share.</h1>
-            <p>An official AWS cloud community at Vasavi College of Engineering empowering students through hands-on cloud engineering, DevOps, and real-world architectures.</p>
-        </div>
-
-        <!-- About Box -->
-        <div class="bento-box box-about animate-in delay-1">
-            <h2>Our Mission</h2>
-            <p>We believe the best way to master the cloud is by building. We host workshops, study jams, and collaborate on production-ready projects to bridge the gap between academia and industry.</p>
-        </div>
-
-        <!-- AWS Services Box (Replaced Tech) -->
-        <div class="bento-box box-services animate-in delay-2">
-            <h2>Core Services</h2>
-            <p style="font-size: 0.85rem; margin-bottom: 16px;">Technologies we build with:</p>
-            <div class="services-grid">
-                <div class="service-item">⚡ AWS Lambda</div>
-                <div class="service-item">📦 Amazon S3</div>
-                <div class="service-item">🖥️ Amazon EC2</div>
-                <div class="service-item">🗄️ DynamoDB</div>
-                <div class="service-item">🐘 Amazon RDS</div>
-                <div class="service-item">🚢 Amazon EKS</div>
-                <div class="service-item">🐳 Amazon ECS</div>
-                <div class="service-item">🚀 AWS Fargate</div>
-                <div class="service-item">🔐 AWS IAM</div>
-                <div class="service-item">🌐 Amazon VPC</div>
-                <div class="service-item">📡 CloudFront</div>
-                <div class="service-item">🧩 CloudFormation</div>
-                <div class="service-item">🧠 SageMaker</div>
-                <div class="service-item">🚪 API Gateway</div>
-                <div class="service-item">🚦 Route 53</div>
-                <div class="service-item">📬 Amazon SNS</div>
-                <div class="service-item">📨 Amazon SQS</div>
-                <div class="service-item">🔍 CloudWatch</div>
-                <div class="service-item">📈 Amazon Redshift</div>
+    <main>
+        <section class="hero">
+            <div class="container hero-content reveal">
+                <div class="badge">
+                    <span class="badge-dot"></span> Official Student Chapter
+                </div>
+                <h1>Architecting the <br><span>Cloud Future</span></h1>
+                <p>An official technical community at Vasavi College of Engineering focused on mastering Amazon Web Services, cloud-native architecture, and DevOps principles.</p>
+                <div class="btn-group">
+                    <a href="#community" class="btn btn-primary">View Network <i class="ri-arrow-right-line"></i></a>
+                    <a href="https://github.com/AWS-Community-VCE" target="_blank" class="btn btn-secondary"><i class="ri-github-fill"></i> Source Code</a>
+                </div>
             </div>
-        </div>
+        </section>
 
-        <!-- Activities Box -->
-        <div class="bento-box box-activities animate-in delay-3">
-            <h2>What We Do</h2>
-            <ul class="activities-list">
-                <li><strong>AWS Study Jams:</strong> Guided hands-on sessions.</li>
-                <li><strong>Projects:</strong> Building scalable cloud applications.</li>
-                <li><strong>Workshops:</strong> Deep dives into DevOps & Docker.</li>
-                <li><strong>Networking:</strong> Connecting passionate engineers.</li>
-            </ul>
-        </div>
-
-        <!-- Resources Box -->
-        <div class="bento-box box-resources animate-in delay-4">
-            <h2>Community Links</h2>
-            <div class="resources-grid">
-                <a href="https://github.com/AWS-Community-VCE" target="_blank" rel="noopener noreferrer" class="resource-card">
-                    <div>
-                        <h3>💻 GitHub</h3>
-                        <p>Open-source projects</p>
+        <section id="mission">
+            <div class="container">
+                <div class="section-header reveal">
+                    <h2 class="section-title">Core Philosophy</h2>
+                    <p class="section-desc">Bridging the gap between academic theory and enterprise reality through hands-on implementation.</p>
+                </div>
+                <div class="grid-3 reveal-group">
+                    <div class="card reveal">
+                        <div class="card-icon"><i class="ri-book-read-line"></i></div>
+                        <h3>Research & Learn</h3>
+                        <p>Comprehensive studies into cloud architecture, serverless design patterns, and enterprise DevOps practices via structured, expert-led workshops.</p>
                     </div>
-                </a>
-                <a href="https://www.linkedin.com/company/aws-cloud-vce" target="_blank" rel="noopener noreferrer" class="resource-card">
-                    <div>
-                        <h3>💼 LinkedIn</h3>
-                        <p>Updates & events</p>
+                    <div class="card reveal">
+                        <div class="card-icon"><i class="ri-terminal-box-line"></i></div>
+                        <h3>Architect & Build</h3>
+                        <p>Practical implementation of theoretical concepts. We design and deploy highly available, fault-tolerant applications on AWS infrastructure.</p>
                     </div>
-                </a>
-                <a href="https://medium.com/@utej21631" target="_blank" rel="noopener noreferrer" class="resource-card">
-                    <div>
-                        <h3>📖 Medium</h3>
-                        <p>Technical articles</p>
+                    <div class="card reveal">
+                        <div class="card-icon"><i class="ri-team-line"></i></div>
+                        <h3>Collaborate & Share</h3>
+                        <p>Fostering an open ecosystem. We contribute to open-source software, publish technical architectures, and conduct peer-to-peer knowledge transfers.</p>
                     </div>
-                </a>
-                <a href="https://www.youtube.com/@DeskyDev8553" target="_blank" rel="noopener noreferrer" class="resource-card">
-                    <div>
-                        <h3>🎥 YouTube</h3>
-                        <p>Workshops & guides</p>
-                    </div>
-                </a>
+                </div>
             </div>
-        </div>
+        </section>
 
-        <!-- Removed Founder Box -->
+        <section id="technologies" class="marquee-section">
+            <div class="container">
+                <div class="section-header reveal" style="margin-bottom: 40px;">
+                    <h2 class="section-title">Infrastructure Stack</h2>
+                    <p class="section-desc">The enterprise-grade technologies we utilize to build resilient and scalable cloud-native systems.</p>
+                </div>
+            </div>
+            
+            <div class="marquee-wrapper reveal">
+                <div class="marquee">
+                    <div class="marquee-content">
+                        <div class="tech-item"><i class="ri-server-line"></i> Amazon EC2</div>
+                        <div class="tech-item"><i class="ri-database-2-line"></i> Amazon S3</div>
+                        <div class="tech-item"><i class="ri-flashlight-line"></i> AWS Lambda</div>
+                        <div class="tech-item"><i class="ri-table-line"></i> Amazon DynamoDB</div>
+                        <div class="tech-item"><i class="ri-cloud-line"></i> Amazon VPC</div>
+                        <div class="tech-item"><i class="ri-box-3-line"></i> Amazon EKS</div>
+                        <div class="tech-item"><i class="ri-ship-line"></i> Amazon ECS</div>
+                        <div class="tech-item"><i class="ri-key-2-line"></i> AWS IAM</div>
+                        <div class="tech-item"><i class="ri-route-line"></i> Amazon Route 53</div>
+                        <div class="tech-item"><i class="ri-braces-line"></i> API Gateway</div>
+                        <div class="tech-item"><i class="ri-rocket-line"></i> AWS Fargate</div>
+                        <div class="tech-item"><i class="ri-line-chart-line"></i> Amazon CloudWatch</div>
+                    </div>
+                    <div class="marquee-content">
+                        <div class="tech-item"><i class="ri-server-line"></i> Amazon EC2</div>
+                        <div class="tech-item"><i class="ri-database-2-line"></i> Amazon S3</div>
+                        <div class="tech-item"><i class="ri-flashlight-line"></i> AWS Lambda</div>
+                        <div class="tech-item"><i class="ri-table-line"></i> Amazon DynamoDB</div>
+                        <div class="tech-item"><i class="ri-cloud-line"></i> Amazon VPC</div>
+                        <div class="tech-item"><i class="ri-box-3-line"></i> Amazon EKS</div>
+                        <div class="tech-item"><i class="ri-ship-line"></i> Amazon ECS</div>
+                        <div class="tech-item"><i class="ri-key-2-line"></i> AWS IAM</div>
+                        <div class="tech-item"><i class="ri-route-line"></i> Amazon Route 53</div>
+                        <div class="tech-item"><i class="ri-braces-line"></i> API Gateway</div>
+                        <div class="tech-item"><i class="ri-rocket-line"></i> AWS Fargate</div>
+                        <div class="tech-item"><i class="ri-line-chart-line"></i> Amazon CloudWatch</div>
+                    </div>
+                </div>
+            </div>
+        </section>
 
+        <section id="challenges">
+            <div class="container">
+                <div class="section-header reveal">
+                    <h2 class="section-title">Cloud Challenges</h2>
+                    <p class="section-desc">Test your engineering skills against real-world AWS architecture scenarios. Compete, learn, and build.</p>
+                </div>
+                <div class="grid-1 reveal-group">
+                    <div class="card challenge-card reveal">
+                        <div class="badge" style="margin-bottom: 24px; border: 1px solid rgba(255,153,0,0.3); background: rgba(255,153,0,0.05); color: var(--aws-orange);">
+                            <span class="badge-dot" style="animation: none;"></span> Upcoming Event
+                        </div>
+                        <div class="card-icon" style="background: transparent; border-color: var(--aws-orange);"><i class="ri-terminal-box-line"></i></div>
+                        <h3 style="font-size: 1.75rem; margin-bottom: 16px;">Challenge - 1</h3>
+                        <p style="font-size: 1.125rem; max-width: 600px; margin: 0 auto; color: var(--text-tertiary);">
+                            We are currently designing the architecture scenario for our very first engineering challenge.<br><br>
+                            <strong style="color: var(--text-primary);">The date for Challenge 1 will be released soon.</strong> Stay tuned!
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="community" style="border-bottom: none;">
+            <div class="container">
+                <div class="section-header reveal">
+                    <h2 class="section-title">Professional Network</h2>
+                    <p class="section-desc">Connect with our community repositories, professional updates, and technical publications.</p>
+                </div>
+                <div class="grid-2 reveal-group">
+                    <a href="https://github.com/AWS-Community-VCE" target="_blank" class="card link-card reveal">
+                        <div class="link-content">
+                            <div class="card-icon"><i class="ri-github-fill"></i></div>
+                            <div>
+                                <h4>GitHub Organization</h4>
+                                <p class="link-desc">Review and contribute to our open-source codebase</p>
+                            </div>
+                        </div>
+                        <i class="ri-arrow-right-line link-arrow"></i>
+                    </a>
+                    <a href="https://www.linkedin.com/company/aws-cloud-vce" target="_blank" class="card link-card reveal">
+                        <div class="link-content">
+                            <div class="card-icon"><i class="ri-linkedin-fill"></i></div>
+                            <div>
+                                <h4>LinkedIn Page</h4>
+                                <p class="link-desc">Follow for professional updates and event schedules</p>
+                            </div>
+                        </div>
+                        <i class="ri-arrow-right-line link-arrow"></i>
+                    </a>
+                    <a href="https://medium.com/@utej21631" target="_blank" class="card link-card reveal">
+                        <div class="link-content">
+                            <div class="card-icon"><i class="ri-medium-fill"></i></div>
+                            <div>
+                                <h4>Medium Publication</h4>
+                                <p class="link-desc">Read our in-depth technical architectures and guides</p>
+                            </div>
+                        </div>
+                        <i class="ri-arrow-right-line link-arrow"></i>
+                    </a>
+                    <a href="https://www.youtube.com/@DeskyDev8553" target="_blank" class="card link-card reveal">
+                        <div class="link-content">
+                            <div class="card-icon"><i class="ri-youtube-fill"></i></div>
+                            <div>
+                                <h4>YouTube Channel</h4>
+                                <p class="link-desc">Access our video workshops and cloud tutorials</p>
+                            </div>
+                        </div>
+                        <i class="ri-arrow-right-line link-arrow"></i>
+                    </a>
+                </div>
+            </div>
+        </section>
     </main>
 
     <footer>
-        <p style="color: var(--accent); font-weight: 600; margin-bottom: 8px;">An Official AWS Student Builder Community</p>
-        <p>AWS Cloud Community • VCE</p>
+        <div class="container footer-content">
+            <div class="footer-logo">
+                <i class="ri-amazon-fill"></i> AWS Community VCE
+            </div>
+            <p>&copy; 2024 AWS Cloud Community • Vasavi College of Engineering. All rights reserved.</p>
+        </div>
     </footer>
 
+    <script>
+        // Navbar shadow on scroll
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 10) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Advanced smooth Intersection Observer for fade-ins
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.reveal, .reveal-group').forEach(el => {
+            observer.observe(el);
+        });
+    </script>
 </body>
 </html>
