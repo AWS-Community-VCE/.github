@@ -64,19 +64,22 @@
         .logo {
             display: flex;
             align-items: center;
+            justify-content: center;
+            height: 50px;
+            width: 140px;
+            overflow: hidden; /* Acts as a precise crop box */
         }
         
         .logo img {
-            height: 54px;
+            height: 300px; /* Zooms in to bypass the massive white borders */
             width: auto;
-            background: #ffffff;
-            padding: 8px 16px;
-            border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(255, 153, 0, 0.15);
+            object-fit: contain;
+            filter: invert(1) hue-rotate(180deg) brightness(1.4); /* Makes text readable and preserves orange */
+            mix-blend-mode: screen; /* Completely drops the white background to match the website */
             transition: transform 0.3s ease;
         }
         
-        .logo img:hover {
+        .logo:hover img {
             transform: scale(1.05);
         }
 
