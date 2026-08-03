@@ -1,17 +1,36 @@
 import { api } from './api.js';
 import { members } from './members.js';
+import { CONFIG } from './config.js';
 
 export const registration = {
     modalEl: null,
     formEl: null,
+    iframeName: 'gscript_iframe',
+    submitTimeout: null,
     
     init() {
         this.modalEl = document.getElementById('registration-modal');
         this.formEl = document.getElementById('registration-form');
         
+        // Setup hidden iframe for CORS-free Google Apps Script submission
+        let iframe = document.getElementById(this.iframeName);
+        if (!iframe) {
+            iframe = document.createElement('iframe');
+            iframe.name = this.iframeName;
+            iframe.id = this.iframeName;
+            iframe.style.display = 'none';
+            document.body.appendChild(iframe);
+        }
+        
         if (this.formEl) {
+            this.formEl.target = this.iframeName;
+            this.formEl.action = CONFIG.APPS_SCRIPT_URL;
+            this.formEl.method = 'POST';
             this.formEl.addEventListener('submit', this.handleSubmit.bind(this));
         }
+        
+        // Listen for message from Apps Script HTML output
+        window.addEventListener('message', this.handleMessage.bind(this));
         
         const closeBtn = document.getElementById('close-modal-btn');
         if (closeBtn) {
@@ -43,9 +62,8 @@ export const registration = {
         formContainer.style.display = 'block';
         alreadyRegisteredMsg.style.display = 'none';
         
-        // Prefill form and ensure email is readonly (it is in HTML, but good to enforce)
+        // Prefill form and ensure email is readonly
         document.getElementById('reg-name').value = user.name || '';
-        
         document.getElementById('reg-email').value = user.email || '';
         document.getElementById('reg-email').readOnly = true;
         
@@ -61,33 +79,45 @@ export const registration = {
         if(this.modalEl) this.modalEl.style.display = 'none';
     },
     
-    async handleSubmit(e) {
-        e.preventDefault();
-        
+    handleSubmit(e) {
+        // Do NOT preventDefault() - let the form submit natively to the hidden iframe
         const submitBtn = this.formEl.querySelector('button[type="submit"]');
-        const originalText = submitBtn.innerText;
+        submitBtn.dataset.originalText = submitBtn.innerText;
         submitBtn.innerText = 'Registering...';
         submitBtn.disabled = true;
         
-        const formData = new FormData(this.formEl);
-        const data = Object.fromEntries(formData.entries());
-        
-        // Payload expected by Apps Script: Name, Email, Branch, Year, Phone, profilePicture
-        // (Apps Script doPost uses data.name, data.email, data.branch, data.year, data.phone, data.profilePicture)
-        // Ensure keys match what Google Apps Script expects
-        const payload = {
-            name: data.name,
-            email: data.email,
-            branch: data.branch,
-            year: data.year,
-            phone: data.phone,
-            profilePicture: data.picture // in HTML it's name="picture", mapping it to profilePicture
-        };
-        
+        // Fallback in case of no response from Apps Script
+        this.submitTimeout = setTimeout(() => {
+            if (submitBtn.disabled) {
+                this.resetButton();
+                this.showToast('Registration took too long. Please check network.', true);
+            }
+        }, 15000);
+    },
+    
+    resetButton() {
+        const submitBtn = this.formEl.querySelector('button[type="submit"]');
+        if (submitBtn && submitBtn.dataset.originalText) {
+            submitBtn.innerText = submitBtn.dataset.originalText;
+            submitBtn.disabled = false;
+        }
+        if (this.submitTimeout) {
+            clearTimeout(this.submitTimeout);
+        }
+    },
+    
+    async handleMessage(event) {
+        let response;
         try {
-            const response = await api.register(payload);
+            response = JSON.parse(event.data);
+        } catch (err) {
+            return; // Ignore non-JSON messages (like from React/Vite extensions)
+        }
+        
+        if (response.success !== undefined) {
+            this.resetButton();
             
-            if (response && response.success === false) {
+            if (response.success === false) {
                 if (response.message === "Already registered") {
                     this.showAlreadyRegistered();
                 } else {
@@ -96,14 +126,8 @@ export const registration = {
             } else {
                 this.showToast('Registration successful! Welcome to the community.');
                 this.close();
-                // Reload members and update count without page refresh
-                await members.loadMembers();
+                await members.loadMembers(); // Refresh dynamically
             }
-        } catch (err) {
-            this.showToast('Network error. Please try again.', true);
-        } finally {
-            submitBtn.innerText = originalText;
-            submitBtn.disabled = false;
         }
     },
     
