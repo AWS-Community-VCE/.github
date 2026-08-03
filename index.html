@@ -482,6 +482,35 @@
             margin-top: 24px;
         }
         
+        /* Core Team */
+        .core-member-card {
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 32px 24px;
+            position: relative;
+            overflow: hidden;
+        }
+        .core-member-card::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px;
+            background: linear-gradient(90deg, var(--aws-orange), var(--aws-green));
+            opacity: 0; transition: var(--transition);
+        }
+        .core-member-card:hover::before { opacity: 1; }
+        
+        .avatar-lg {
+            width: 88px; height: 88px;
+            border-radius: 50%;
+            background: #8b5cf6; color: #fff;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 2.5rem; font-weight: 700;
+            margin-bottom: 16px;
+        }
+        .core-member-card h4 { font-size: 1.25rem; font-weight: 700; margin-bottom: 4px; }
+        .core-member-card p { font-size: 0.95rem; color: var(--aws-orange); font-weight: 600; }
+
+        
         /* Modal & Forms */
         .modal-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
@@ -552,11 +581,19 @@
         @keyframes scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
 
         @media (max-width: 768px) {
+            .container { padding: 0 16px; }
+            .hero { padding: 32px 0; }
             .hero-grid { grid-template-columns: 1fr; gap: 32px; }
+            .info-title { font-size: 2rem; }
             .search-bar { display: none; }
-            .tabs-list { overflow-x: auto; padding-bottom: 4px; }
-            .tab-link { white-space: nowrap; }
-            .btn-join { display: none; } 
+            .tabs-list { overflow-x: auto; padding-bottom: 8px; -webkit-overflow-scrolling: touch; }
+            .tab-link { white-space: nowrap; padding: 12px 0; }
+            .tabs-container .btn-join { display: none; } 
+            .grid-3, .grid-2 { grid-template-columns: 1fr; }
+            .section-header h3 { font-size: 1.25rem; }
+            .hero-graphic { height: 280px; }
+            .graphic-content h2 { font-size: 1.75rem; }
+            .graphic-blocks { transform: scale(0.7); transform-origin: bottom right; }
         }
     </style>
 </head>
@@ -652,6 +689,9 @@
                     <a href="#challenges" class="tab-link">
                         <i class="ri-trophy-fill tab-icon"></i> Challenges
                     </a>
+                    <a href="#core-team" class="tab-link">
+                        <i class="ri-star-fill tab-icon"></i> Core Team
+                    </a>
                     <a href="#members-section" class="tab-link">
                         <i class="ri-group-fill tab-icon"></i> Members
                     </a>
@@ -724,6 +764,41 @@
                         <p style="margin-top: 4px; max-width: 500px;">We are currently designing the architecture scenario for our very first engineering challenge. Stay tuned!</p>
                     </div>
                     <button class="btn-join" style="background:var(--bg-surface);color:var(--text-primary);border:1px solid var(--border-dark);">RSVP Soon</button>
+                </div>
+            </section>
+
+            <!-- Core Team -->
+            <section id="core-team" class="content-section" style="border-top: 1px solid var(--border-light);">
+                <div class="section-header">
+                    <h3>Core Team</h3>
+                    <p>Meet the leaders driving the AWS Student Builder Group at VCE.</p>
+                </div>
+                <div class="grid-3">
+                    <div class="card core-member-card">
+                        <div class="avatar-lg" style="background: #3b82f6; box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);">U</div>
+                        <h4>Utej Avulla</h4>
+                        <p>Student Builder Group Leader</p>
+                    </div>
+                    <div class="card core-member-card">
+                        <div class="avatar-lg" style="background: #f59e0b; box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);">S</div>
+                        <h4>Surya Chandra</h4>
+                        <p>Partnerships & Outreach Lead</p>
+                    </div>
+                    <div class="card core-member-card">
+                        <div class="avatar-lg" style="background: #10b981; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);">A</div>
+                        <h4>Arun Sagar Gunti</h4>
+                        <p>Events & Operations Lead</p>
+                    </div>
+                    <div class="card core-member-card">
+                        <div class="avatar-lg" style="background: #8b5cf6; box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);">N</div>
+                        <h4>Nehanth Godishala</h4>
+                        <p>Technical Lead</p>
+                    </div>
+                    <div class="card core-member-card">
+                        <div class="avatar-lg" style="background: #ec4899; box-shadow: 0 4px 12px rgba(236, 72, 153, 0.3);">S</div>
+                        <h4>Sudeep Kumar</h4>
+                        <p>Marketing & Design Lead</p>
+                    </div>
                 </div>
             </section>
 
