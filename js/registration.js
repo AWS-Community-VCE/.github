@@ -48,6 +48,23 @@ export const registration = {
         if (loginPrompt) loginPrompt.style.display = 'block';
         if (formContainer) formContainer.style.display = 'none';
         if (alreadyRegisteredMsg) alreadyRegisteredMsg.style.display = 'none';
+
+        // Render the Google Sign-In button now that its container is visible
+        const renderBtn = () => {
+            if (window.google && window.google.accounts) {
+                const btnContainer = document.getElementById('google-signin-btn');
+                if (btnContainer && !btnContainer.hasChildNodes()) {
+                    window.google.accounts.id.renderButton(
+                        btnContainer,
+                        { theme: "outline", size: "large", type: "standard", width: 250 }
+                    );
+                }
+            } else {
+                // If library isn't loaded yet, try again in 100ms
+                setTimeout(renderBtn, 100);
+            }
+        };
+        renderBtn();
     },
 
     open(user) {

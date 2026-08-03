@@ -49,12 +49,6 @@ export const auth = {
             callback: window.handleCredentialResponse
         });
         
-        // Render the standard Sign in with Google button
-        google.accounts.id.renderButton(
-            document.getElementById('google-signin-btn'),
-            { theme: "outline", size: "large", type: "standard", width: 250 }
-        );
-        
         this.isInitialized = true;
     },
 
