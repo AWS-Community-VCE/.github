@@ -1,36 +1,18 @@
-
+import { api } from './api.js';
 import { members } from './members.js';
 import { CONFIG } from './config.js';
 
 export const registration = {
     modalEl: null,
     formEl: null,
-    iframeName: 'gscript_iframe',
-    submitTimeout: null,
     
     init() {
         this.modalEl = document.getElementById('registration-modal');
         this.formEl = document.getElementById('registration-form');
         
-        // Setup hidden iframe for CORS-free Google Apps Script submission
-        let iframe = document.getElementById(this.iframeName);
-        if (!iframe) {
-            iframe = document.createElement('iframe');
-            iframe.name = this.iframeName;
-            iframe.id = this.iframeName;
-            iframe.style.display = 'none';
-            document.body.appendChild(iframe);
-        }
-        
         if (this.formEl) {
-            this.formEl.target = this.iframeName;
-            this.formEl.action = CONFIG.APPS_SCRIPT_URL;
-            this.formEl.method = 'POST';
             this.formEl.addEventListener('submit', this.handleSubmit.bind(this));
         }
-        
-        // Listen for message from Apps Script HTML output
-        window.addEventListener('message', this.handleMessage.bind(this));
         
         const closeBtn = document.getElementById('close-modal-btn');
         if (closeBtn) {
@@ -49,7 +31,6 @@ export const registration = {
         if (formContainer) formContainer.style.display = 'none';
         if (alreadyRegisteredMsg) alreadyRegisteredMsg.style.display = 'none';
 
-        // Render the Google Sign-In button now that its container is visible
         const renderBtn = () => {
             if (window.google && window.google.accounts) {
                 const btnContainer = document.getElementById('google-signin-btn');
@@ -60,7 +41,6 @@ export const registration = {
                     );
                 }
             } else {
-                // If library isn't loaded yet, try again in 100ms
                 setTimeout(renderBtn, 100);
             }
         };
@@ -79,7 +59,6 @@ export const registration = {
         formContainer.style.display = 'block';
         alreadyRegisteredMsg.style.display = 'none';
         
-        // Prefill form and ensure email is readonly
         document.getElementById('reg-name').value = user.name || '';
         document.getElementById('reg-email').value = user.email || '';
         document.getElementById('reg-email').readOnly = true;
@@ -96,45 +75,30 @@ export const registration = {
         if(this.modalEl) this.modalEl.style.display = 'none';
     },
     
-    handleSubmit(e) {
-        // Do NOT preventDefault() - let the form submit natively to the hidden iframe
+    async handleSubmit(e) {
+        e.preventDefault();
+        
         const submitBtn = this.formEl.querySelector('button[type="submit"]');
-        submitBtn.dataset.originalText = submitBtn.innerText;
+        const originalText = submitBtn.innerText;
         submitBtn.innerText = 'Registering...';
         submitBtn.disabled = true;
         
-        // Fallback in case of no response from Apps Script
-        this.submitTimeout = setTimeout(() => {
-            if (submitBtn.disabled) {
-                this.resetButton();
-                this.showToast('Registration took too long. Please check network.', true);
-            }
-        }, 15000);
-    },
-    
-    resetButton() {
-        const submitBtn = this.formEl.querySelector('button[type="submit"]');
-        if (submitBtn && submitBtn.dataset.originalText) {
-            submitBtn.innerText = submitBtn.dataset.originalText;
-            submitBtn.disabled = false;
-        }
-        if (this.submitTimeout) {
-            clearTimeout(this.submitTimeout);
-        }
-    },
-    
-    async handleMessage(event) {
-        let response;
-        try {
-            response = JSON.parse(event.data);
-        } catch (err) {
-            return; // Ignore non-JSON messages (like from React/Vite extensions)
-        }
+        const formData = new FormData(this.formEl);
+        const data = Object.fromEntries(formData.entries());
         
-        if (response.success !== undefined) {
-            this.resetButton();
+        const payload = {
+            name: data.name,
+            email: data.email,
+            branch: data.branch,
+            year: data.year,
+            phone: data.phone,
+            profilePicture: data.picture 
+        };
+        
+        try {
+            const response = await api.register(payload);
             
-            if (response.success === false) {
+            if (response && response.success === false) {
                 if (response.message === "Already registered") {
                     this.showAlreadyRegistered();
                 } else {
@@ -143,8 +107,14 @@ export const registration = {
             } else {
                 this.showToast('Registration successful! Welcome to the community.');
                 this.close();
-                await members.loadMembers(); // Refresh dynamically
+                await members.loadMembers();
             }
+        } catch (err) {
+            console.error('Registration API error:', err);
+            this.showToast('Network error. Please try again.', true);
+        } finally {
+            submitBtn.innerText = originalText;
+            submitBtn.disabled = false;
         }
     },
     
