@@ -16,6 +16,5 @@ export const api = {
             console.error('Error fetching members:', error);
             return []; // Return empty array on error
         }
-    },
     }
 };
