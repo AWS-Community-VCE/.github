@@ -31,25 +31,30 @@ export const auth = {
         if (window.google && window.google.accounts) {
             this.setupGSI();
         } else {
-            // Poll for the library if it's loading async
             const interval = setInterval(() => {
                 if (window.google && window.google.accounts) {
                     clearInterval(interval);
                     this.setupGSI();
                 }
             }, 100);
-            
-            // Timeout after 10 seconds
             setTimeout(() => clearInterval(interval), 10000);
         }
     },
     
     setupGSI() {
         if (this.isInitialized) return;
+        
         google.accounts.id.initialize({
             client_id: CONFIG.GOOGLE_CLIENT_ID,
             callback: window.handleCredentialResponse
         });
+        
+        // Render the standard Sign in with Google button
+        google.accounts.id.renderButton(
+            document.getElementById('google-signin-btn'),
+            { theme: "outline", size: "large", type: "standard", width: 250 }
+        );
+        
         this.isInitialized = true;
     },
 
@@ -60,19 +65,5 @@ export const auth = {
             return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
         }).join(''));
         return JSON.parse(jsonPayload);
-    },
-
-    promptSignIn() {
-        if (!this.isInitialized) {
-            registration.showToast('Google Login is still loading. Please try again.', true);
-            return;
-        }
-        
-        google.accounts.id.prompt((notification) => {
-            if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
-                console.warn("Prompt blocked or skipped:", notification.getNotDisplayedReason(), notification.getSkippedReason());
-                registration.showToast('Google popup blocked. Please allow popups or One Tap.', true);
-            }
-        });
     }
 };

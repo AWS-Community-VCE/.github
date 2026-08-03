@@ -16,8 +16,8 @@ document.addEventListener('DOMContentLoaded', () => {
     joinBtns.forEach(btn => {
         btn.addEventListener('click', (e) => {
             e.preventDefault();
-            // User clicks "Join Community" -> Open Google Sign In popup immediately
-            auth.promptSignIn();
+            // User clicks "Join Community" -> Open login prompt modal
+            registration.openLoginPrompt();
         });
     });
 });

@@ -19,10 +19,21 @@ export const registration = {
         }
     },
     
+    openLoginPrompt() {
+        this.modalEl.style.display = 'flex';
+        
+        const loginPrompt = document.getElementById('login-prompt-container');
+        const formContainer = document.getElementById('reg-form-container');
+        const alreadyRegisteredMsg = document.getElementById('already-registered-msg');
+        
+        if (loginPrompt) loginPrompt.style.display = 'block';
+        if (formContainer) formContainer.style.display = 'none';
+        if (alreadyRegisteredMsg) alreadyRegisteredMsg.style.display = 'none';
+    },
+
     open(user) {
         this.modalEl.style.display = 'flex';
         
-        // Hide login prompt if it exists in HTML, although we removed it mentally, just in case
         const loginPrompt = document.getElementById('login-prompt-container');
         if (loginPrompt) loginPrompt.style.display = 'none';
         
