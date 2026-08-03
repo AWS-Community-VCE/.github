@@ -10,7 +10,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
     
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    
     <style>
+        /* CSS reset and variables */
         :root {
             --bg-main: #ffffff;
             --bg-surface: #f9fafb;
@@ -21,724 +24,842 @@
             --text-tertiary: #6b7280;
             --aws-orange: #ff9900;
             --aws-orange-dim: #fff4e5;
+            --aws-green: #00e88f; /* Similar to the green in the mockup */
             --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-            --shadow-hover: 0 12px 24px -8px rgba(0, 0, 0, 0.12), 0 4px 8px -4px rgba(0, 0, 0, 0.08);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
             --radius-md: 8px;
             --radius-lg: 12px;
-            --transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            --radius-xl: 20px;
+            --transition: all 0.3s ease;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            font-family: 'Inter', sans-serif;
             background-color: var(--bg-main);
             color: var(--text-primary);
             line-height: 1.6;
             -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-            overflow-x: hidden;
         }
 
-        /* Clean Background Grid */
-        .bg-grid {
-            position: fixed;
-            top: 0; left: 0; width: 100vw; height: 100vh;
-            background-image: linear-gradient(var(--border-light) 1px, transparent 1px),
-                              linear-gradient(90deg, var(--border-light) 1px, transparent 1px);
-            background-size: 40px 40px;
-            opacity: 0.4;
-            z-index: -1;
-            pointer-events: none;
-            mask-image: linear-gradient(to bottom, black 0%, transparent 70%);
-            -webkit-mask-image: linear-gradient(to bottom, black 0%, transparent 70%);
-        }
-
-        /* Navigation */
-        nav {
-            position: fixed;
-            top: 0; width: 100%;
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border-bottom: 1px solid var(--border-light);
-            z-index: 100;
-            padding: 16px 0;
-            transition: var(--transition);
-        }
-
-        nav.scrolled {
-            padding: 12px 0;
-            background: rgba(255, 255, 255, 0.95);
-            box-shadow: var(--shadow-sm);
-        }
-
-        .nav-container {
-            max-width: 1120px;
+        .container {
+            max-width: 1100px;
             margin: 0 auto;
             padding: 0 24px;
+        }
+
+        /* Top Header */
+        header {
+            border-bottom: 1px solid var(--border-light);
+            padding: 12px 0;
+            background: var(--bg-main);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
             display: flex;
-            justify-content: space-between;
             align-items: center;
+            justify-content: space-between;
         }
 
         .logo {
             display: flex;
             align-items: center;
-            gap: 12px;
-            font-weight: 700;
-            font-size: 1.125rem;
+            gap: 8px;
+            font-weight: 800;
+            font-size: 1.25rem;
             color: var(--text-primary);
             text-decoration: none;
-            letter-spacing: -0.01em;
+            letter-spacing: -0.02em;
+        }
+        
+        .logo i { color: var(--aws-orange); font-size: 1.5rem; }
+
+        .search-bar {
+            display: flex;
+            align-items: center;
+            background: var(--bg-surface);
+            border: 1px solid var(--border-light);
+            border-radius: 99px;
+            padding: 8px 16px;
+            width: 350px;
+            gap: 12px;
             transition: var(--transition);
         }
-
-        .logo:hover {
-            transform: scale(1.02);
+        
+        .search-bar:focus-within {
+            border-color: var(--aws-orange);
+            background: #fff;
+            box-shadow: 0 0 0 2px rgba(255, 153, 0, 0.1);
         }
 
-        .logo-icon {
-            color: var(--aws-orange);
-            font-size: 1.5rem;
+        .search-bar i { color: var(--text-tertiary); }
+        .search-bar input {
+            border: none;
+            background: transparent;
+            outline: none;
+            width: 100%;
+            font-size: 0.875rem;
+            color: var(--text-primary);
+            font-family: inherit;
+        }
+        
+        .header-actions {
             display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .icon-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 1.25rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .icon-btn:hover { color: var(--text-primary); }
+
+        /* Hero Section */
+        .hero {
+            padding: 48px 0;
+        }
+
+        .hero-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 48px;
             align-items: center;
         }
 
-        .nav-links {
+        /* Hero Graphic Card */
+        .hero-graphic {
+            background-color: #111827;
+            border-radius: var(--radius-xl);
+            height: 360px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
+            background-image: 
+                linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+        
+        .graphic-header {
+            position: absolute;
+            top: 24px; right: 24px; left: 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: rgba(255,255,255,0.8);
+            font-size: 0.875rem;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .graphic-badge {
+            background: var(--aws-green);
+            color: #111827;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-weight: 700;
+            font-size: 0.75rem;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+
+        .graphic-content {
+            position: absolute;
+            bottom: 40px; left: 40px;
+            color: #fff;
+            max-width: 320px;
+        }
+
+        .graphic-content h2 {
+            font-size: 2.25rem;
+            font-weight: 700;
+            line-height: 1.2;
+            letter-spacing: -0.02em;
+            font-family: 'JetBrains Mono', monospace;
+        }
+        
+        .graphic-blocks {
+            position: absolute;
+            right: 40px; bottom: 40px;
+            display: grid;
+            grid-template-columns: repeat(3, 40px);
+            grid-template-rows: repeat(3, 40px);
+            gap: 0;
+        }
+        
+        .block-green { background: var(--aws-green); }
+        .block-orange { background: var(--aws-orange); }
+
+        /* Hero Info */
+        .hero-info {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .info-subtitle {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin-bottom: 12px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .info-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            line-height: 1.1;
+            margin-bottom: 24px;
+            color: var(--text-primary);
+        }
+
+        .info-meta {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            margin-bottom: 32px;
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+        
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .share-row {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-top: 12px;
+        }
+
+        .share-row span {
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 8px;
+        }
+
+        .social-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px; height: 36px;
+            border-radius: 50%;
+            background: transparent;
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: var(--transition);
+            font-size: 1.125rem;
+        }
+        .social-btn:hover {
+            background: var(--bg-surface);
+            color: var(--text-primary);
+        }
+
+        /* Tabs Section */
+        .tabs-wrapper {
+            border-bottom: 1px solid var(--border-light);
+            background: var(--bg-main);
+            position: sticky;
+            top: 61px;
+            z-index: 90;
+        }
+
+        .tabs-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .tabs-list {
             display: flex;
             gap: 32px;
         }
 
-        .nav-links a {
-            color: var(--text-secondary);
-            font-size: 0.875rem;
-            font-weight: 500;
+        .tab-link {
+            padding: 16px 0;
             text-decoration: none;
-            transition: var(--transition);
-        }
-
-        .nav-links a:hover {
-            color: var(--text-primary);
-        }
-
-        .container {
-            max-width: 1120px;
-            margin: 0 auto;
-            padding: 0 24px;
-        }
-
-        /* Hero */
-        .hero {
-            padding: 160px 0 100px;
-            border-bottom: 1px solid var(--border-light);
-            background: linear-gradient(180deg, var(--bg-surface) 0%, var(--bg-main) 100%);
-        }
-
-        .hero-content {
-            max-width: 768px;
-        }
-
-        .badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 4px 12px;
-            background: var(--bg-main);
-            border: 1px solid var(--border-light);
-            border-radius: 9999px;
-            font-size: 0.75rem;
+            color: var(--text-secondary);
             font-weight: 600;
-            color: var(--text-secondary);
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            margin-bottom: 24px;
-            box-shadow: var(--shadow-sm);
-        }
-
-        .badge-dot {
-            width: 6px; height: 6px;
-            background-color: var(--aws-orange);
-            border-radius: 50%;
-            box-shadow: 0 0 8px rgba(255, 153, 0, 0.6);
-            animation: pulse-glow 2s infinite;
-        }
-
-        @keyframes pulse-glow {
-            0% { box-shadow: 0 0 0 0 rgba(255, 153, 0, 0.4); }
-            70% { box-shadow: 0 0 0 4px rgba(255, 153, 0, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(255, 153, 0, 0); }
-        }
-
-        .hero h1 {
-            font-size: clamp(2.5rem, 5vw, 4rem);
-            font-weight: 800;
-            line-height: 1.1;
-            letter-spacing: -0.03em;
-            color: var(--text-primary);
-            margin-bottom: 24px;
-        }
-
-        .hero h1 span {
-            color: var(--aws-orange);
-        }
-
-        .hero p {
-            font-size: 1.125rem;
-            color: var(--text-secondary);
-            max-width: 600px;
-            margin-bottom: 40px;
-            line-height: 1.6;
-        }
-
-        .btn-group {
+            font-size: 0.95rem;
+            border-bottom: 2px solid transparent;
+            transition: var(--transition);
             display: flex;
-            gap: 16px;
-        }
-
-        .btn {
-            display: inline-flex;
             align-items: center;
-            justify-content: center;
-            padding: 12px 24px;
-            font-size: 0.875rem;
-            font-weight: 600;
-            border-radius: var(--radius-md);
-            text-decoration: none;
-            transition: var(--transition);
             gap: 8px;
         }
 
-        .btn-primary {
-            background-color: var(--text-primary);
-            color: #ffffff;
-            border: 1px solid transparent;
-            box-shadow: var(--shadow-sm);
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 16px -4px rgba(0, 0, 0, 0.2);
-            background-color: #000000;
-        }
-
-        .btn-secondary {
-            background-color: #ffffff;
+        .tab-link:hover { color: var(--text-primary); }
+        .tab-link.active {
             color: var(--text-primary);
-            border: 1px solid var(--border-dark);
+            border-bottom-color: var(--text-primary);
+        }
+        
+        .tab-icon {
+            font-size: 1.125rem;
+            color: #8b5cf6;
+        }
+        .tab-link:hover .tab-icon, .tab-link.active .tab-icon {
+            color: #6d28d9;
         }
 
-        .btn-secondary:hover {
-            background-color: var(--bg-surface);
-            border-color: var(--text-secondary);
-            transform: translateY(-2px);
+        .btn-join {
+            background: var(--text-primary);
+            color: #fff;
+            text-decoration: none;
+            padding: 10px 24px;
+            border-radius: 99px;
+            font-weight: 600;
+            font-size: 0.875rem;
+            transition: var(--transition);
+            cursor: pointer;
+            border: none;
+            outline: none;
         }
+        .btn-join:hover { background: #374151; transform: translateY(-1px); }
 
-        /* Sections */
-        section {
-            padding: 96px 0;
-            border-bottom: 1px solid var(--border-light);
-            position: relative;
+        /* Main Content area */
+        .content-section {
+            padding: 48px 0;
+            scroll-margin-top: 130px;
         }
 
         .section-header {
-            margin-bottom: 48px;
-            max-width: 640px;
+            margin-bottom: 24px;
         }
 
-        .section-title {
-            font-size: 1.875rem;
+        .section-header h3 {
+            font-size: 1.5rem;
             font-weight: 700;
-            color: var(--text-primary);
-            letter-spacing: -0.02em;
-            margin-bottom: 16px;
+            margin-bottom: 8px;
+            letter-spacing: -0.01em;
         }
+        
+        .section-header p { color: var(--text-secondary); font-size: 1rem; }
 
-        .section-desc {
-            font-size: 1.125rem;
-            color: var(--text-secondary);
-        }
-
-        /* Grid Layouts */
+        /* Cards Grid */
         .grid-3 {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 24px;
         }
-
         .grid-2 {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
             gap: 24px;
         }
-        
-        .grid-1 {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 24px;
-        }
 
-        /* Cards */
         .card {
             background: #ffffff;
             border: 1px solid var(--border-light);
             border-radius: var(--radius-lg);
-            padding: 32px;
+            padding: 24px;
             transition: var(--transition);
-            position: relative;
         }
-
         .card:hover {
-            border-color: rgba(255, 153, 0, 0.2);
-            transform: translateY(-6px) scale(1.01);
-            box-shadow: var(--shadow-hover);
+            box-shadow: var(--shadow-sm);
+            border-color: var(--border-dark);
+            transform: translateY(-2px);
         }
 
         .card-icon {
-            width: 44px;
-            height: 44px;
-            background: var(--bg-surface);
-            border: 1px solid var(--border-light);
+            width: 44px; height: 44px;
+            background: var(--aws-orange-dim);
             border-radius: var(--radius-md);
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            display: flex; align-items: center; justify-content: center;
             font-size: 1.25rem;
             color: var(--aws-orange);
-            margin-bottom: 20px;
-            transition: var(--transition);
-        }
-        
-        .card:hover .card-icon {
-            background: var(--aws-orange-dim);
-            border-color: rgba(255, 153, 0, 0.2);
+            margin-bottom: 16px;
         }
 
-        .card h3 {
-            font-size: 1.25rem;
+        .card h4 {
+            font-size: 1.125rem;
             font-weight: 600;
-            margin-bottom: 12px;
+            margin-bottom: 8px;
             color: var(--text-primary);
         }
-
-        .card p {
-            font-size: 0.95rem;
-            color: var(--text-secondary);
-            line-height: 1.6;
-        }
-
-        /* Placeholder specific styles for Challenges */
-        .challenge-card {
-            text-align: center;
-            padding: 64px 32px;
-            background: repeating-linear-gradient(45deg, var(--bg-surface), var(--bg-surface) 10px, #ffffff 10px, #ffffff 20px);
-            border: 1px dashed var(--border-dark);
-        }
         
-        .challenge-card:hover {
-            border: 1px dashed var(--aws-orange);
-        }
+        .card p { font-size: 0.95rem; color: var(--text-secondary); line-height: 1.5; }
 
-        .challenge-card .card-icon {
-            margin: 0 auto 20px;
-            width: 56px; height: 56px;
-            font-size: 1.5rem;
-        }
-
-        /* Glitch-Free Marquee */
-        .marquee-section {
-            padding: 80px 0;
-            border-bottom: 1px solid var(--border-light);
-            overflow: hidden;
-            background: var(--bg-main);
-            width: 100%;
-        }
-        
-        .marquee-wrapper {
-            position: relative;
-            width: 100%;
-            mask-image: linear-gradient(90deg, transparent, black 15%, black 85%, transparent);
-            -webkit-mask-image: linear-gradient(90deg, transparent, black 15%, black 85%, transparent);
-        }
-        
-        .marquee {
-            display: flex;
-            width: max-content;
-            animation: marquee-scroll 40s linear infinite;
-        }
-        
-        .marquee:hover {
-            animation-play-state: paused;
-        }
-        
-        .marquee-content {
-            display: flex;
-            gap: 16px;
-            padding: 0 8px;
-            flex-shrink: 0;
-        }
-
-        .tech-item {
+        /* List Links */
+        .link-item {
             display: flex;
             align-items: center;
-            gap: 12px;
-            padding: 12px 20px;
-            background: #ffffff;
+            padding: 16px;
             border: 1px solid var(--border-light);
             border-radius: var(--radius-md);
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.875rem;
-            color: var(--text-secondary);
+            text-decoration: none;
+            color: inherit;
+            margin-bottom: 12px;
             transition: var(--transition);
-            white-space: nowrap;
+            background: #ffffff;
         }
-
-        .tech-item:hover {
-            background: var(--aws-orange-dim);
-            border-color: rgba(255, 153, 0, 0.3);
-            color: var(--aws-orange);
-            transform: translateY(-2px);
+        
+        .link-item:hover {
+            background: var(--bg-surface);
+            border-color: var(--aws-orange);
             box-shadow: var(--shadow-sm);
         }
 
-        .tech-item i {
-            font-size: 1.125rem;
-            transition: var(--transition);
-        }
-        
-        .tech-item:hover i {
-            transform: scale(1.1);
-        }
-
-        @keyframes marquee-scroll {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-50%); }
-        }
-
-        /* Links Card */
-        .link-card {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            text-decoration: none;
-        }
-        
-        .link-content {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-        }
-
-        .link-card .card-icon {
-            margin-bottom: 0;
-            color: var(--text-secondary);
-            background: #ffffff;
-            border-color: var(--border-light);
-        }
-
-        .link-card:hover .card-icon {
-            background: var(--aws-orange);
-            border-color: var(--aws-orange);
-            color: #ffffff;
-        }
-
-        .link-card h4 {
-            font-size: 1.125rem;
-            font-weight: 600;
-            color: var(--text-primary);
-            margin-bottom: 4px;
-        }
-
-        .link-card .link-desc {
-            font-size: 0.875rem;
-            color: var(--text-tertiary);
-        }
-
-        .link-arrow {
-            color: var(--text-tertiary);
-            transition: var(--transition);
+        .link-icon {
+            width: 40px; height: 40px;
+            border-radius: var(--radius-md);
+            background: var(--bg-surface);
+            display: flex; align-items: center; justify-content: center;
             font-size: 1.25rem;
+            margin-right: 16px;
+            color: var(--text-secondary);
+            transition: var(--transition);
+        }
+        
+        .link-item:hover .link-icon { 
+            color: var(--aws-orange); 
+            background: var(--aws-orange-dim);
         }
 
-        .link-card:hover .link-arrow {
-            color: var(--aws-orange);
-            transform: translateX(6px);
+        .link-text h5 { font-size: 1rem; font-weight: 600; margin-bottom: 2px; }
+        .link-text span { font-size: 0.875rem; color: var(--text-tertiary); }
+        
+        .link-item i.ri-arrow-right-line {
+            margin-left: auto;
+            color: var(--text-tertiary);
+            transition: var(--transition);
         }
+        .link-item:hover i.ri-arrow-right-line { transform: translateX(4px); color: var(--aws-orange); }
 
-        /* Footer */
-        footer {
-            padding: 48px 0;
-            background: #ffffff;
-        }
-
-        .footer-content {
+        /* Members Section */
+        .member-card {
             display: flex;
-            flex-direction: column;
             align-items: center;
             gap: 16px;
+            padding: 12px;
+            border-radius: var(--radius-md);
+            transition: var(--transition);
+        }
+        .member-card:hover { background: var(--bg-surface); }
+        
+        .avatar {
+            width: 44px; height: 44px;
+            border-radius: 50%;
+            background: #8b5cf6;
+            color: #ffffff;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 600;
+            font-size: 1.125rem;
+            overflow: hidden;
+        }
+        .avatar img {
+            width: 100%; height: 100%; object-fit: cover;
         }
 
-        .footer-logo {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-weight: 700;
-            color: var(--text-primary);
-        }
-        .footer-logo i {
-            color: var(--aws-orange);
-        }
-
-        footer p {
-            font-size: 0.875rem;
-            color: var(--text-tertiary);
-        }
-
-        /* Fade-in Animation */
-        .reveal {
-            opacity: 0;
-            transform: translateY(20px);
-            transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        .member-info h5 { font-size: 1rem; font-weight: 600; margin-bottom: 2px; }
+        .member-info p { font-size: 0.875rem; color: var(--text-tertiary); }
+        
+        .members-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 16px;
+            margin-top: 24px;
         }
         
-        .reveal.visible {
-            opacity: 1;
-            transform: translateY(0);
+        /* Modal & Forms */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: none; align-items: center; justify-content: center;
+            z-index: 1000;
+            backdrop-filter: blur(4px);
         }
-
-        .reveal-group.visible .reveal:nth-child(1) { transition-delay: 0.05s; }
-        .reveal-group.visible .reveal:nth-child(2) { transition-delay: 0.15s; }
-        .reveal-group.visible .reveal:nth-child(3) { transition-delay: 0.25s; }
-        .reveal-group.visible .reveal:nth-child(4) { transition-delay: 0.35s; }
+        .modal {
+            background: #fff;
+            border-radius: var(--radius-lg);
+            width: 100%; max-width: 400px;
+            padding: 32px;
+            box-shadow: var(--shadow-lg);
+            position: relative;
+        }
+        .modal-close {
+            position: absolute; top: 16px; right: 16px;
+            background: none; border: none; font-size: 1.5rem; color: var(--text-secondary); cursor: pointer;
+        }
+        .modal h3 { font-size: 1.5rem; font-weight: 700; margin-bottom: 8px; }
+        .modal p { color: var(--text-secondary); margin-bottom: 24px; font-size: 0.95rem; }
         
+        .form-group { margin-bottom: 16px; }
+        .form-group label { display: block; font-size: 0.875rem; font-weight: 600; margin-bottom: 8px; }
+        .form-group input, .form-group select {
+            width: 100%; padding: 10px 12px;
+            border: 1px solid var(--border-dark);
+            border-radius: var(--radius-md);
+            font-family: inherit; font-size: 0.95rem;
+        }
+        .form-group input[readonly] { background: var(--bg-surface); color: var(--text-secondary); }
+        
+        .btn-submit {
+            width: 100%; padding: 12px;
+            background: var(--text-primary); color: #fff;
+            border: none; border-radius: var(--radius-md);
+            font-weight: 600; cursor: pointer; transition: var(--transition);
+            margin-top: 8px;
+        }
+        .btn-submit:hover { background: #000; }
+        .btn-submit:disabled { opacity: 0.7; cursor: not-allowed; }
+        
+        /* Toast */
+        .toast {
+            position: fixed; bottom: 24px; right: 24px;
+            padding: 12px 24px; border-radius: var(--radius-md);
+            background: #10b981; color: #fff; font-weight: 600;
+            box-shadow: var(--shadow-md);
+            transform: translateY(100px); opacity: 0;
+            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            z-index: 1000;
+        }
+        .toast.show { transform: translateY(0); opacity: 1; }
+
+        /* Marquee */
+        .marquee-container {
+            overflow: hidden; background: var(--bg-surface); padding: 24px;
+            border-radius: var(--radius-lg); border: 1px dashed var(--border-dark); display: flex;
+        }
+        .marquee { display: flex; gap: 16px; animation: scroll 25s linear infinite; }
+        .marquee-item {
+            display: flex; align-items: center; gap: 8px; padding: 8px 16px;
+            background: #fff; border: 1px solid var(--border-light); border-radius: 99px;
+            font-family: 'JetBrains Mono', monospace; font-size: 0.875rem; white-space: nowrap;
+            color: var(--text-secondary); box-shadow: var(--shadow-sm);
+        }
+        @keyframes scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+
         @media (max-width: 768px) {
-            .nav-links { display: none; }
-            .hero { padding: 120px 0 80px; }
-            .hero h1 { font-size: 2.5rem; }
-            .btn-group { flex-direction: column; }
-            .btn { width: 100%; }
-            .grid-2 { grid-template-columns: 1fr; }
+            .hero-grid { grid-template-columns: 1fr; gap: 32px; }
+            .search-bar { display: none; }
+            .tabs-list { overflow-x: auto; padding-bottom: 4px; }
+            .tab-link { white-space: nowrap; }
+            .btn-join { display: none; } 
         }
     </style>
 </head>
 <body>
 
-    <div class="bg-grid"></div>
-
-    <nav id="navbar">
-        <div class="nav-container">
+    <!-- Minimal Header -->
+    <header>
+        <div class="container header-content">
             <a href="#" class="logo">
-                <i class="ri-amazon-fill logo-icon"></i>
+                <i class="ri-amazon-fill"></i>
                 AWS Community VCE
             </a>
-            <div class="nav-links">
-                <a href="#mission">Philosophy</a>
-                <a href="#technologies">Infrastructure</a>
-                <a href="#challenges">Challenges</a>
-                <a href="#community">Network</a>
+            
+            <div class="search-bar">
+                <i class="ri-search-line"></i>
+                <input type="text" placeholder="Search events, network, or resources...">
+            </div>
+
+            <div class="header-actions">
+                <button class="icon-btn"><i class="ri-global-line"></i></button>
+                <button class="icon-btn" style="margin-left: 8px; border: 1px solid var(--border-light); border-radius: 50%; padding: 2px;">
+                    <div style="width:32px;height:32px;border-radius:50%;background:var(--bg-surface);color:var(--text-secondary);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:600;"><i class="ri-user-smile-line"></i></div>
+                </button>
             </div>
         </div>
-    </nav>
+    </header>
 
+    <!-- Hero Section -->
     <main>
-        <section class="hero">
-            <div class="container hero-content reveal">
-                <div class="badge">
-                    <span class="badge-dot"></span> Official Student Chapter
+        <section class="hero container">
+            <div class="hero-grid">
+                <!-- Graphic Card Left -->
+                <div class="hero-graphic">
+                    <div class="graphic-header">
+                        <i class="ri-amazon-fill" style="font-size:1.75rem;color:#fff;"></i>
+                        <span class="graphic-badge">AWS Student Builder Group</span>
+                    </div>
+                    
+                    <div class="graphic-content">
+                        <h2>Want to build<br>the future?<br>Join the club.</h2>
+                    </div>
+
+                    <!-- Decorative Grid Blocks -->
+                    <div class="graphic-blocks">
+                        <div class="block-green" style="grid-column:1;grid-row:2;"></div>
+                        <div class="block-green" style="grid-column:2;grid-row:2;"></div>
+                        <div class="block-green" style="grid-column:3;grid-row:2;"></div>
+                        <div class="block-green" style="grid-column:2;grid-row:3;"></div>
+                        <div class="block-orange" style="grid-column:1;grid-row:3;opacity:0.9;"></div>
+                        <div class="block-orange" style="grid-column:3;grid-row:1;opacity:0.9;"></div>
+                    </div>
                 </div>
-                <h1>Architecting the <br><span>Cloud Future</span></h1>
-                <p>An official technical community at Vasavi College of Engineering focused on mastering Amazon Web Services, cloud-native architecture, and DevOps principles.</p>
-                <div class="btn-group">
-                    <a href="#community" class="btn btn-primary">View Network <i class="ri-arrow-right-line"></i></a>
-                    <a href="https://github.com/AWS-Community-VCE" target="_blank" class="btn btn-secondary"><i class="ri-github-fill"></i> Source Code</a>
+
+                <!-- Info Right -->
+                <div class="hero-info">
+                    <div class="info-subtitle">
+                        Part of AWS Student Builder Groups - 1,114 groups <i class="ri-information-line" style="color:var(--text-tertiary);"></i>
+                    </div>
+                    <h1 class="info-title">AWS SBG at Vasavi College of Engineering</h1>
+                    
+                    <div class="info-meta">
+                        <div class="meta-item">
+                            <i class="ri-map-pin-line"></i> Hyderabad, India
+                        </div>
+                        <div class="meta-item" id="hero-member-count">
+                            <i class="ri-group-line"></i> Loading members...
+                        </div>
+                    </div>
+
+                    <div class="share-row">
+                        <button class="btn-join" style="margin-right: 16px;">Join Community</button>
+                        <span>Share</span>
+                        <div class="social-links">
+                            <a href="#" class="social-btn"><i class="ri-facebook-fill"></i></a>
+                            <a href="#" class="social-btn"><i class="ri-twitter-x-fill"></i></a>
+                            <a href="https://www.linkedin.com/company/aws-cloud-vce" target="_blank" class="social-btn"><i class="ri-linkedin-fill"></i></a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
 
-        <section id="mission">
-            <div class="container">
-                <div class="section-header reveal">
-                    <h2 class="section-title">Core Philosophy</h2>
-                    <p class="section-desc">Bridging the gap between academic theory and enterprise reality through hands-on implementation.</p>
+        <!-- Tabs -->
+        <div class="tabs-wrapper">
+            <div class="container tabs-container">
+                <div class="tabs-list">
+                    <a href="#about" class="tab-link active">
+                        <i class="ri-information-fill tab-icon"></i> About
+                    </a>
+                    <a href="#infrastructure" class="tab-link">
+                        <i class="ri-server-fill tab-icon"></i> Infrastructure
+                    </a>
+                    <a href="#challenges" class="tab-link">
+                        <i class="ri-trophy-fill tab-icon"></i> Challenges
+                    </a>
+                    <a href="#members-section" class="tab-link">
+                        <i class="ri-group-fill tab-icon"></i> Members
+                    </a>
                 </div>
-                <div class="grid-3 reveal-group">
-                    <div class="card reveal">
+                <button class="btn-join" style="display: block;">Join this group</button>
+            </div>
+        </div>
+
+        <!-- Content Area -->
+        <div class="container">
+            
+            <!-- About -->
+            <section id="about" class="content-section">
+                <div class="section-header">
+                    <h3>About us</h3>
+                    <p>Bridging the gap between academic theory and enterprise reality.</p>
+                </div>
+                <div class="grid-3">
+                    <div class="card">
                         <div class="card-icon"><i class="ri-book-read-line"></i></div>
-                        <h3>Research & Learn</h3>
+                        <h4>Research & Learn</h4>
                         <p>Comprehensive studies into cloud architecture, serverless design patterns, and enterprise DevOps practices via structured, expert-led workshops.</p>
                     </div>
-                    <div class="card reveal">
+                    <div class="card">
                         <div class="card-icon"><i class="ri-terminal-box-line"></i></div>
-                        <h3>Architect & Build</h3>
+                        <h4>Architect & Build</h4>
                         <p>Practical implementation of theoretical concepts. We design and deploy highly available, fault-tolerant applications on AWS infrastructure.</p>
                     </div>
-                    <div class="card reveal">
+                    <div class="card">
                         <div class="card-icon"><i class="ri-team-line"></i></div>
-                        <h3>Collaborate & Share</h3>
+                        <h4>Collaborate & Share</h4>
                         <p>Fostering an open ecosystem. We contribute to open-source software, publish technical architectures, and conduct peer-to-peer knowledge transfers.</p>
                     </div>
                 </div>
-            </div>
-        </section>
+            </section>
 
-        <section id="technologies" class="marquee-section">
-            <div class="container">
-                <div class="section-header reveal" style="margin-bottom: 40px;">
-                    <h2 class="section-title">Infrastructure Stack</h2>
-                    <p class="section-desc">The enterprise-grade technologies we utilize to build resilient and scalable cloud-native systems.</p>
+            <!-- Infrastructure -->
+            <section id="infrastructure" class="content-section" style="border-top: 1px solid var(--border-light);">
+                <div class="section-header">
+                    <h3>Infrastructure Stack</h3>
+                    <p>Technologies we utilize to build resilient cloud-native systems.</p>
                 </div>
-            </div>
-            
-            <div class="marquee-wrapper reveal">
-                <div class="marquee">
-                    <div class="marquee-content">
-                        <div class="tech-item"><i class="ri-server-line"></i> Amazon EC2</div>
-                        <div class="tech-item"><i class="ri-database-2-line"></i> Amazon S3</div>
-                        <div class="tech-item"><i class="ri-flashlight-line"></i> AWS Lambda</div>
-                        <div class="tech-item"><i class="ri-table-line"></i> Amazon DynamoDB</div>
-                        <div class="tech-item"><i class="ri-cloud-line"></i> Amazon VPC</div>
-                        <div class="tech-item"><i class="ri-box-3-line"></i> Amazon EKS</div>
-                        <div class="tech-item"><i class="ri-ship-line"></i> Amazon ECS</div>
-                        <div class="tech-item"><i class="ri-key-2-line"></i> AWS IAM</div>
-                        <div class="tech-item"><i class="ri-route-line"></i> Amazon Route 53</div>
-                        <div class="tech-item"><i class="ri-braces-line"></i> API Gateway</div>
-                        <div class="tech-item"><i class="ri-rocket-line"></i> AWS Fargate</div>
-                        <div class="tech-item"><i class="ri-line-chart-line"></i> Amazon CloudWatch</div>
-                    </div>
-                    <div class="marquee-content">
-                        <div class="tech-item"><i class="ri-server-line"></i> Amazon EC2</div>
-                        <div class="tech-item"><i class="ri-database-2-line"></i> Amazon S3</div>
-                        <div class="tech-item"><i class="ri-flashlight-line"></i> AWS Lambda</div>
-                        <div class="tech-item"><i class="ri-table-line"></i> Amazon DynamoDB</div>
-                        <div class="tech-item"><i class="ri-cloud-line"></i> Amazon VPC</div>
-                        <div class="tech-item"><i class="ri-box-3-line"></i> Amazon EKS</div>
-                        <div class="tech-item"><i class="ri-ship-line"></i> Amazon ECS</div>
-                        <div class="tech-item"><i class="ri-key-2-line"></i> AWS IAM</div>
-                        <div class="tech-item"><i class="ri-route-line"></i> Amazon Route 53</div>
-                        <div class="tech-item"><i class="ri-braces-line"></i> API Gateway</div>
-                        <div class="tech-item"><i class="ri-rocket-line"></i> AWS Fargate</div>
-                        <div class="tech-item"><i class="ri-line-chart-line"></i> Amazon CloudWatch</div>
+                <div class="marquee-container">
+                    <div class="marquee">
+                        <div class="marquee-item"><i class="ri-server-line" style="color:var(--aws-orange);"></i> Amazon EC2</div>
+                        <div class="marquee-item"><i class="ri-database-2-line" style="color:var(--aws-orange);"></i> Amazon S3</div>
+                        <div class="marquee-item"><i class="ri-flashlight-line" style="color:var(--aws-orange);"></i> AWS Lambda</div>
+                        <div class="marquee-item"><i class="ri-table-line" style="color:var(--aws-orange);"></i> Amazon DynamoDB</div>
+                        <div class="marquee-item"><i class="ri-cloud-line" style="color:var(--aws-orange);"></i> Amazon VPC</div>
+                        <div class="marquee-item"><i class="ri-box-3-line" style="color:var(--aws-orange);"></i> Amazon EKS</div>
+                        <!-- duplicate for scroll effect -->
+                        <div class="marquee-item"><i class="ri-server-line" style="color:var(--aws-orange);"></i> Amazon EC2</div>
+                        <div class="marquee-item"><i class="ri-database-2-line" style="color:var(--aws-orange);"></i> Amazon S3</div>
+                        <div class="marquee-item"><i class="ri-flashlight-line" style="color:var(--aws-orange);"></i> AWS Lambda</div>
+                        <div class="marquee-item"><i class="ri-table-line" style="color:var(--aws-orange);"></i> Amazon DynamoDB</div>
                     </div>
                 </div>
-            </div>
-        </section>
+            </section>
 
-        <section id="challenges">
-            <div class="container">
-                <div class="section-header reveal">
-                    <h2 class="section-title">Cloud Challenges</h2>
-                    <p class="section-desc">Test your engineering skills against real-world AWS architecture scenarios. Compete, learn, and build.</p>
+            <!-- Challenges -->
+            <section id="challenges" class="content-section" style="border-top: 1px solid var(--border-light);">
+                <div class="section-header">
+                    <h3>Challenges</h3>
+                    <p>Test your engineering skills against real-world AWS architecture scenarios.</p>
                 </div>
-                <div class="grid-1 reveal-group">
-                    <div class="card challenge-card reveal">
-                        <div class="badge" style="margin-bottom: 24px; border: 1px solid rgba(255,153,0,0.3); background: rgba(255,153,0,0.05); color: var(--aws-orange);">
-                            <span class="badge-dot" style="animation: none;"></span> Upcoming Event
-                        </div>
-                        <div class="card-icon" style="background: transparent; border-color: var(--aws-orange);"><i class="ri-terminal-box-line"></i></div>
-                        <h3 style="font-size: 1.75rem; margin-bottom: 16px;">Challenge - 1</h3>
-                        <p style="font-size: 1.125rem; max-width: 600px; margin: 0 auto; color: var(--text-tertiary);">
-                            We are currently designing the architecture scenario for our very first engineering challenge.<br><br>
-                            <strong style="color: var(--text-primary);">The date for Challenge 1 will be released soon.</strong> Stay tuned!
-                        </p>
+                <div class="card" style="display: flex; align-items: center; justify-content: space-between; border-left: 4px solid #8b5cf6; max-width: 800px;">
+                    <div>
+                        <div style="font-size:0.75rem;font-weight:700;text-transform:uppercase;color:#8b5cf6;margin-bottom:8px;letter-spacing:0.05em;">Upcoming Event</div>
+                        <h4 style="font-size:1.25rem;">Challenge 1: Serverless Architecture</h4>
+                        <p style="margin-top: 4px; max-width: 500px;">We are currently designing the architecture scenario for our very first engineering challenge. Stay tuned!</p>
+                    </div>
+                    <button class="btn-join" style="background:var(--bg-surface);color:var(--text-primary);border:1px solid var(--border-dark);">RSVP Soon</button>
+                </div>
+            </section>
+
+            <!-- Dynamic Members Section -->
+            <section id="members-section" class="content-section" style="border-top: 1px solid var(--border-light);">
+                <div class="section-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
+                    <div>
+                        <h3 style="display: flex; align-items: center; gap: 12px;">
+                            Community Members 
+                            <span id="member-count" style="font-size:0.875rem;color:var(--text-tertiary);background:var(--bg-surface);padding:4px 12px;border-radius:99px;font-weight:500;">...</span>
+                        </h3>
+                        <p>Connect with our growing network of cloud engineers.</p>
+                    </div>
+                    
+                    <!-- Search Input -->
+                    <div style="position: relative; width: 300px; max-width: 100%;">
+                        <i class="ri-search-line" style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--text-tertiary);"></i>
+                        <input type="text" id="member-search" placeholder="Search members by name or branch..." 
+                            style="width: 100%; padding: 10px 16px 10px 40px; border: 1px solid var(--border-light); border-radius: 99px; outline: none; font-family: inherit; font-size: 0.875rem;">
                     </div>
                 </div>
-            </div>
-        </section>
+                
+                <div id="members-grid" class="members-grid">
+                    <!-- Members injected via JS -->
+                </div>
+            </section>
 
-        <section id="community" style="border-bottom: none;">
-            <div class="container">
-                <div class="section-header reveal">
-                    <h2 class="section-title">Professional Network</h2>
-                    <p class="section-desc">Connect with our community repositories, professional updates, and technical publications.</p>
-                </div>
-                <div class="grid-2 reveal-group">
-                    <a href="https://github.com/AWS-Community-VCE" target="_blank" class="card link-card reveal">
-                        <div class="link-content">
-                            <div class="card-icon"><i class="ri-github-fill"></i></div>
-                            <div>
-                                <h4>GitHub Organization</h4>
-                                <p class="link-desc">Review and contribute to our open-source codebase</p>
-                            </div>
-                        </div>
-                        <i class="ri-arrow-right-line link-arrow"></i>
-                    </a>
-                    <a href="https://www.linkedin.com/company/aws-cloud-vce" target="_blank" class="card link-card reveal">
-                        <div class="link-content">
-                            <div class="card-icon"><i class="ri-linkedin-fill"></i></div>
-                            <div>
-                                <h4>LinkedIn Page</h4>
-                                <p class="link-desc">Follow for professional updates and event schedules</p>
-                            </div>
-                        </div>
-                        <i class="ri-arrow-right-line link-arrow"></i>
-                    </a>
-                    <a href="https://medium.com/@utej21631" target="_blank" class="card link-card reveal">
-                        <div class="link-content">
-                            <div class="card-icon"><i class="ri-medium-fill"></i></div>
-                            <div>
-                                <h4>Medium Publication</h4>
-                                <p class="link-desc">Read our in-depth technical architectures and guides</p>
-                            </div>
-                        </div>
-                        <i class="ri-arrow-right-line link-arrow"></i>
-                    </a>
-                    <a href="https://www.youtube.com/@DeskyDev8553" target="_blank" class="card link-card reveal">
-                        <div class="link-content">
-                            <div class="card-icon"><i class="ri-youtube-fill"></i></div>
-                            <div>
-                                <h4>YouTube Channel</h4>
-                                <p class="link-desc">Access our video workshops and cloud tutorials</p>
-                            </div>
-                        </div>
-                        <i class="ri-arrow-right-line link-arrow"></i>
-                    </a>
-                </div>
-            </div>
-        </section>
+        </div>
     </main>
 
-    <footer>
-        <div class="container footer-content">
-            <div class="footer-logo">
-                <i class="ri-amazon-fill"></i> AWS Community VCE
+    <footer style="padding: 48px 0; background: var(--bg-surface); margin-top: 32px; border-top: 1px solid var(--border-light);">
+        <div class="container" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px;">
+            <div style="display:inline-flex;align-items:center;gap:8px;font-weight:700;color:var(--text-primary);">
+                <i class="ri-amazon-fill" style="color:var(--aws-orange);font-size:1.25rem;"></i> AWS Community VCE
             </div>
-            <p>&copy; 2024 AWS Cloud Community • Vasavi College of Engineering. All rights reserved.</p>
+            <p style="font-size:0.875rem;color:var(--text-tertiary);">&copy; 2024 AWS Cloud Community • Vasavi College of Engineering. All rights reserved.</p>
         </div>
     </footer>
 
+    <!-- Registration Modal -->
+    <div id="registration-modal" class="modal-overlay">
+        <div class="modal">
+            <button id="close-modal-btn" class="modal-close"><i class="ri-close-line"></i></button>
+            
+            <div id="already-registered-msg" style="display: none; text-align: center; padding: 24px 0;">
+                <div style="width: 64px; height: 64px; border-radius: 50%; background: #d1fae5; color: #10b981; display: flex; align-items: center; justify-content: center; font-size: 2rem; margin: 0 auto 16px;">
+                    <i class="ri-check-line"></i>
+                </div>
+                <h3 style="margin-bottom: 8px;">You're already a member!</h3>
+                <p style="margin-bottom: 0;">Thanks for being part of our community.</p>
+            </div>
+            
+            <div id="login-prompt-container" style="display: none; text-align: center; padding: 24px 0;">
+                <div style="width: 64px; height: 64px; border-radius: 50%; background: var(--aws-orange-dim); color: var(--aws-orange); display: flex; align-items: center; justify-content: center; font-size: 2rem; margin: 0 auto 16px;">
+                    <i class="ri-google-fill"></i>
+                </div>
+                <h3 style="margin-bottom: 8px;">Sign in to join</h3>
+                <p style="margin-bottom: 24px;">Please authenticate with your Google account to proceed with registration.</p>
+                <div id="google-signin-btn" style="display: flex; justify-content: center;"></div>
+            </div>
+            
+            <div id="reg-form-container">
+                <h3>Join the Community</h3>
+                <p>Complete your profile to officially join the AWS SBG chapter.</p>
+                
+                <form id="registration-form">
+                    <input type="hidden" id="reg-picture" name="picture">
+                    
+                    <div class="form-group">
+                        <label>Full Name</label>
+                        <input type="text" id="reg-name" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Email Address</label>
+                        <input type="email" id="reg-email" name="email" readonly required>
+                    </div>
+                    <div class="form-group">
+                        <label>Branch</label>
+                        <select name="branch" required>
+                            <option value="">Select your branch</option>
+                            <option value="CSE">Computer Science (CSE)</option>
+                            <option value="CSM">CSE (AI & ML)</option>
+                            <option value="IT">Information Technology (IT)</option>
+                            <option value="ECE">Electronics (ECE)</option>
+                            <option value="EEE">Electrical (EEE)</option>
+                            <option value="Mech">Mechanical</option>
+                            <option value="Civil">Civil</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Year of Study</label>
+                        <select name="year" required>
+                            <option value="">Select your year</option>
+                            <option value="1st">1st Year</option>
+                            <option value="2nd">2nd Year</option>
+                            <option value="3rd">3rd Year</option>
+                            <option value="4th">4th Year</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Phone Number</label>
+                        <input type="tel" name="phone" placeholder="e.g. 9876543210" required>
+                    </div>
+                    
+                    <button type="submit" class="btn-submit">Complete Registration</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast-notification" class="toast">Action successful</div>
+
+    <!-- Modular Scripts -->
+    <script type="module" src="./js/main.js"></script>
+
     <script>
-        // Navbar shadow on scroll
-        const navbar = document.getElementById('navbar');
+        // Simple active tab highlight on scroll (independent of modules)
+        const sections = document.querySelectorAll('.content-section');
+        const navLinks = document.querySelectorAll('.tab-link');
+
         window.addEventListener('scroll', () => {
-            if (window.scrollY > 10) {
-                navbar.classList.add('scrolled');
-            } else {
-                navbar.classList.remove('scrolled');
-            }
-        });
-
-        // Advanced smooth Intersection Observer for fade-ins
-        const observerOptions = {
-            root: null,
-            rootMargin: '0px',
-            threshold: 0.1
-        };
-
-        const observer = new IntersectionObserver((entries, observer) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                    observer.unobserve(entry.target);
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                if (scrollY >= sectionTop - 150) {
+                    current = section.getAttribute('id');
                 }
             });
-        }, observerOptions);
 
-        document.querySelectorAll('.reveal, .reveal-group').forEach(el => {
-            observer.observe(el);
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href').includes(current)) {
+                    link.classList.add('active');
+                }
+            });
         });
     </script>
 </body>
