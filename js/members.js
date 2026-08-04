@@ -71,9 +71,17 @@ export const members = {
             const year = member['Year'] ? '• ' + member['Year'] : '';
             const pic = member['Profile Picture'];
             
+            const colors = ['#FF9900', '#8b5cf6', '#10b981', '#ef4444', '#3b82f6', '#f59e0b', '#06b6d4', '#ec4899'];
+            let hash = 0;
+            for (let i = 0; i < name.length; i++) {
+                hash = name.charCodeAt(i) + ((hash << 5) - hash);
+            }
+            const colorIndex = Math.abs(hash) % colors.length;
+            const avatarColor = colors[colorIndex];
+            
             const avatarHtml = pic 
                 ? `<img src="${pic}" alt="${name}" class="avatar" style="object-fit: cover;">`
-                : `<div class="avatar">${name.charAt(0).toUpperCase()}</div>`;
+                : `<div class="avatar" style="background: ${avatarColor};">${name.charAt(0).toUpperCase()}</div>`;
                 
             card.innerHTML = `
                 ${avatarHtml}
