@@ -1,6 +1,8 @@
+import { members } from './members.js';
 import { registration } from './registration.js';
 
 document.addEventListener('DOMContentLoaded', () => {
+    members.init();
     registration.init();
     
     const joinBtns = document.querySelectorAll('.btn-join');

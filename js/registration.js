@@ -1,4 +1,5 @@
 import { api } from './api.js';
+import { members } from './members.js';
 import { CONFIG } from './config.js';
 
 export const registration = {
@@ -84,6 +85,7 @@ export const registration = {
             } else {
                 this.showToast('Registration successful! Welcome to the community.');
                 this.close();
+                await members.loadMembers();
             }
         } catch (err) {
             console.error('Registration API error:', err);

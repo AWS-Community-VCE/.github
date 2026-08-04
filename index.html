@@ -662,6 +662,9 @@
                         <div class="meta-item">
                             <i class="ri-map-pin-line"></i> Hyderabad, India
                         </div>
+                        <div class="meta-item" id="hero-member-count">
+                            <i class="ri-group-line"></i> Loading members...
+                        </div>
 
                     </div>
 
@@ -693,6 +696,9 @@
                     </a>
                     <a href="#core-team" class="tab-link">
                         <i class="ri-star-fill tab-icon"></i> Core Team
+                    </a>
+                    <a href="#members-section" class="tab-link">
+                        <i class="ri-group-fill tab-icon"></i> Members
                     </a>
 
                 </div>
@@ -768,6 +774,30 @@
             </section>
 
 
+
+            <!-- Dynamic Members Section -->
+            <section id="members-section" class="content-section" style="border-top: 1px solid var(--border-light);">
+                <div class="section-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
+                    <div>
+                        <h3 style="display: flex; align-items: center; gap: 12px;">
+                            Community Members 
+                            <span id="member-count" style="font-size:0.875rem;color:var(--text-tertiary);background:var(--bg-surface);padding:4px 12px;border-radius:99px;font-weight:500;">...</span>
+                        </h3>
+                        <p>Connect with our growing network of cloud engineers.</p>
+                    </div>
+                    
+                    <!-- Search Input -->
+                    <div style="position: relative; width: 300px; max-width: 100%;">
+                        <i class="ri-search-line" style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--text-tertiary);"></i>
+                        <input type="text" id="member-search" placeholder="Search members by name or branch..." 
+                            style="width: 100%; padding: 10px 16px 10px 40px; border: 1px solid var(--border-light); border-radius: 99px; outline: none; font-family: inherit; font-size: 0.875rem;">
+                    </div>
+                </div>
+                
+                <div id="members-grid" class="members-grid">
+                    <!-- Members injected via JS -->
+                </div>
+            </section>
 
             <!-- Core Team -->
             <section id="core-team" class="content-section" style="border-top: 1px solid var(--border-light);">
