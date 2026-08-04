@@ -21,7 +21,7 @@ export const registration = {
     },
     
     open() {
-        this.modalEl.style.display = 'flex';
+        this.modalEl.classList.add('show');
         
         const loginPrompt = document.getElementById('login-prompt-container');
         if (loginPrompt) loginPrompt.style.display = 'none';
@@ -50,7 +50,7 @@ export const registration = {
     },
     
     close() {
-        if(this.modalEl) this.modalEl.style.display = 'none';
+        if(this.modalEl) this.modalEl.classList.remove('show');
     },
     
     async handleSubmit(e) {

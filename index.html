@@ -523,6 +523,21 @@
             z-index: 1000;
             backdrop-filter: blur(4px);
         }
+        .modal-overlay.show {
+            display: flex;
+            animation: overlayFadeIn 0.2s ease-out forwards;
+        }
+        .modal-overlay.show .modal {
+            animation: modalScaleUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        @keyframes overlayFadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes modalScaleUp {
+            from { opacity: 0; transform: translateY(10px) scale(0.97); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
         .modal {
             background: #fff;
             border-radius: var(--radius-lg);
@@ -694,9 +709,7 @@
                     <a href="#challenges" class="tab-link">
                         <i class="ri-trophy-fill tab-icon"></i> Challenges
                     </a>
-                    <a href="#core-team" class="tab-link">
-                        <i class="ri-star-fill tab-icon"></i> Core Team
-                    </a>
+
                     <a href="#members-section" class="tab-link">
                         <i class="ri-group-fill tab-icon"></i> Members
                     </a>
@@ -799,40 +812,7 @@
                 </div>
             </section>
 
-            <!-- Core Team -->
-            <section id="core-team" class="content-section" style="border-top: 1px solid var(--border-light);">
-                <div class="section-header">
-                    <h3>Core Team</h3>
-                    <p>Meet the leaders driving the AWS Student Builder Group at VCE.</p>
-                </div>
-                <div class="grid-core">
-                    <div class="card core-member-card">
-                        <div class="avatar-lg" style="background: #3b82f6; box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);">U</div>
-                        <h4>Utej Avulla</h4>
-                        <p>Student Builder Group Leader</p>
-                    </div>
-                    <div class="card core-member-card">
-                        <div class="avatar-lg" style="background: #f59e0b; box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);">S</div>
-                        <h4>Surya Chandra</h4>
-                        <p>Partnerships & Outreach Lead</p>
-                    </div>
-                    <div class="card core-member-card">
-                        <div class="avatar-lg" style="background: #10b981; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);">A</div>
-                        <h4>Arun Sagar Gunti</h4>
-                        <p>Events & Operations Lead</p>
-                    </div>
-                    <div class="card core-member-card">
-                        <div class="avatar-lg" style="background: #8b5cf6; box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);">N</div>
-                        <h4>Nehanth Godishala</h4>
-                        <p>Technical Lead</p>
-                    </div>
-                    <div class="card core-member-card">
-                        <div class="avatar-lg" style="background: #ec4899; box-shadow: 0 4px 12px rgba(236, 72, 153, 0.3);">S</div>
-                        <h4>Sudeep Kumar</h4>
-                        <p>Marketing & Design Lead</p>
-                    </div>
-                </div>
-            </section>
+
 
         </div>
     </main>
