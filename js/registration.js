@@ -1,5 +1,4 @@
 import { api } from './api.js';
-import { members } from './members.js';
 import { CONFIG } from './config.js';
 
 export const registration = {
@@ -20,34 +19,7 @@ export const registration = {
         }
     },
     
-    openLoginPrompt() {
-        this.modalEl.style.display = 'flex';
-        
-        const loginPrompt = document.getElementById('login-prompt-container');
-        const formContainer = document.getElementById('reg-form-container');
-        const alreadyRegisteredMsg = document.getElementById('already-registered-msg');
-        
-        if (loginPrompt) loginPrompt.style.display = 'block';
-        if (formContainer) formContainer.style.display = 'none';
-        if (alreadyRegisteredMsg) alreadyRegisteredMsg.style.display = 'none';
-
-        const renderBtn = () => {
-            if (window.google && window.google.accounts) {
-                const btnContainer = document.getElementById('google-signin-btn');
-                if (btnContainer && !btnContainer.hasChildNodes()) {
-                    window.google.accounts.id.renderButton(
-                        btnContainer,
-                        { theme: "outline", size: "large", type: "standard", width: 250 }
-                    );
-                }
-            } else {
-                setTimeout(renderBtn, 100);
-            }
-        };
-        renderBtn();
-    },
-
-    open(user) {
+    open() {
         this.modalEl.style.display = 'flex';
         
         const loginPrompt = document.getElementById('login-prompt-container');
@@ -56,14 +28,19 @@ export const registration = {
         const formContainer = document.getElementById('reg-form-container');
         const alreadyRegisteredMsg = document.getElementById('already-registered-msg');
         
-        formContainer.style.display = 'block';
-        alreadyRegisteredMsg.style.display = 'none';
+        if (formContainer) formContainer.style.display = 'block';
+        if (alreadyRegisteredMsg) alreadyRegisteredMsg.style.display = 'none';
         
-        document.getElementById('reg-name').value = user.name || '';
-        document.getElementById('reg-email').value = user.email || '';
-        document.getElementById('reg-email').readOnly = true;
+        // Reset the form so fields are empty (including email)
+        if (this.formEl) {
+            this.formEl.reset();
+        }
         
-        document.getElementById('reg-picture').value = user.profilePicture || '';
+        // Ensure email is not readonly
+        const emailInput = document.getElementById('reg-email');
+        if (emailInput) {
+            emailInput.readOnly = false;
+        }
     },
     
     showAlreadyRegistered() {
@@ -107,7 +84,6 @@ export const registration = {
             } else {
                 this.showToast('Registration successful! Welcome to the community.');
                 this.close();
-                await members.loadMembers();
             }
         } catch (err) {
             console.error('Registration API error:', err);
