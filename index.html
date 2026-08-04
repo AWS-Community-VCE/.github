@@ -904,10 +904,15 @@
             let current = '';
             sections.forEach(section => {
                 const sectionTop = section.offsetTop;
-                if (scrollY >= sectionTop - 150) {
+                if (window.scrollY >= sectionTop - 150) {
                     current = section.getAttribute('id');
                 }
             });
+            
+            // If scrolled to bottom, force last section
+            if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 10) {
+                current = sections[sections.length - 1].getAttribute('id');
+            }
 
             navLinks.forEach(link => {
                 link.classList.remove('active');
